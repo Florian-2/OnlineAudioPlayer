@@ -13,7 +13,8 @@ const router = createRouter({
 			meta: {
 				title: "AudioPlayer - Accueil"
 			},
-			component: HomeView,
+			beforeEnter: [isNotAuthenticated],
+			component: HomeView
 		},
 		{
 			path: "/audio-player",
@@ -22,7 +23,7 @@ const router = createRouter({
 				title: "AudioPlayer - Mes musiques"
 			},
 			beforeEnter: [isAuthenticated],
-		 	component: () => import('@/views/AudioPlayerView.vue'),
+		 	component: () => import('@/views/AudioPlayerView.vue')
 		},
 		{
 			path: "/profil",
@@ -31,7 +32,7 @@ const router = createRouter({
 				title: "AudioPlayer - Mon Profil"
 			},
 			beforeEnter: [isAuthenticated],
-		 	component: () => import('@/views/ProfileView.vue'),
+		 	component: () => import('@/views/ProfileView.vue')
 		},
 		{
 			path: "/favorite",
@@ -40,7 +41,7 @@ const router = createRouter({
 				title: "AudioPlayer - Mes musiques favorites"
 			},
 			beforeEnter: [isAuthenticated],
-		 	component: () => import('@/views/FavoriView.vue'),
+		 	component: () => import('@/views/FavoriView.vue')
 		},
 		{
 			path: "/login",
@@ -49,7 +50,7 @@ const router = createRouter({
 				title: "AudioPlayer - Connexion"
 			},
 			beforeEnter: [isNotAuthenticated],
-		 	component: () => import('@/views/LoginView.vue'),
+		 	component: () => import('@/views/LoginView.vue')
 		},
 		{
 			path: "/register",
@@ -58,7 +59,7 @@ const router = createRouter({
 				title: "AudioPlayer - Inscription"
 			},
 			beforeEnter: [isNotAuthenticated],
-		 	component: () => import('@/views/RegisterView.vue'),
+		 	component: () => import('@/views/RegisterView.vue')
 		},
 		{
 			path: "/:notfound(.*)*",

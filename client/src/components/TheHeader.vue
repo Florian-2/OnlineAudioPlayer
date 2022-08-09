@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
+
+const router = useRouter();
 
 defineProps<{
     isAuthenticated: boolean | null
@@ -11,7 +13,7 @@ const emit = defineEmits<{
 
 <template>
     <header>
-        <h1>Audio Player</h1> 
+        <router-link to="home" class="logo">Audio Player</router-link>
 
         <nav>
             <template v-if="isAuthenticated">
@@ -29,7 +31,20 @@ const emit = defineEmits<{
 </template>
 
 <style scoped>
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
 header {
-    margin-bottom: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+a {
+    color: black;
+    font-size: 1.4rem;
 }
 </style>
