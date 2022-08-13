@@ -1,12 +1,14 @@
 <script setup lang="ts">
-defineProps<{
+import Button from "../Button.vue";
+const props = defineProps<{
     type: "text" | "email";
     label: string | undefined;
     name: string;
     modelValue: string;
+    icon: "user" | "email"
     error: any;
-    handleChange: (payload: FocusEvent) => void,
-    handleBlur: (payload: FocusEvent) => void,
+    handleChange: (payload: Event) => void,
+    // handleBlur: (payload: FocusEvent) => void,
     meta: { touched: boolean, valid: boolean, validated: boolean }
 }>()
 
@@ -23,19 +25,21 @@ const updateValue = (e: Event) => {
 <template>
     <div class="form-group">
         <label :for="name">{{ label }}</label>
+
         <input 
             :value="modelValue"
             @input="updateValue" 
             :type="type" :id="name" :name="name"
             @blur="handleChange"
-            @focus="handleBlur"
+            @change="handleChange"
             :class="{ 'error': meta.touched && !meta.valid && meta.validated }"  
         />
+
         <small v-if="error">{{ error }}</small>
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .error {
     border: 2px solid red;
 }

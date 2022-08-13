@@ -1,11 +1,49 @@
 @import "./scss/base.scss";
 
+html {
+	font-size: 62.5%;
+	font-family: $font-fam;
+}
+
+body {
+	height: 100vh;
+}
+
 #app {
     height: 100%;
-    /* display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 70px 1fr;
-    align-items: center; */
+
+	form {
+		.form-group {
+			margin-bottom: 2.5rem;
+		}
+
+		label, input {
+			font-size: clamp(1.25rem, 2vw, 1.6rem);
+		}
+
+		label {
+			display: inline-block;
+			margin-bottom: 0.5rem;
+			color: $primary-color;
+		}
+
+		input {
+			width: 100%;
+			padding: 1rem 0.5rem;
+			color: $primary-color;
+			background-color: transparent;
+			border-radius: 3px;
+			border: 2px solid $primary-color;
+			outline: none;
+		}
+	}
+
+	small {
+		display: inline-block;
+		margin-top: 0.5rem;
+		font-size: clamp(1.1rem, 2vw, 1.3rem);
+		color: red;
+	}
 }
 
 main {

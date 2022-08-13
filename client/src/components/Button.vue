@@ -1,21 +1,30 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
     <button>
         <slot></slot>
     </button>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 button {
-    background-color: var(--btn-color);
-    border-radius: 10px;
-    color: black;
-    padding: 7px 10px;
+    background: transparent;
+    padding: 1rem;
+    font-size: clamp(1.25rem, 2vw, 1.4rem);
+    color: $primary-color;
     letter-spacing: 0.3px;
+    border-radius: 3px;
+    border: 2px solid $primary-color;
     cursor: pointer;
-    font-weight: bold;
+    transition: all $time-anim;
+
+    &:hover, &:focus {
+        box-shadow: inset 100px 0 0 0 $btn-color;
+        border-color: $btn-color;
+        color: black;
+    }
+}
+
+button[type=reset]:hover, button[type=reset]:focus {
+    box-shadow: inset 100px 0 0 0 $danger-color;
+    border-color: $danger-color;
 }
 </style>

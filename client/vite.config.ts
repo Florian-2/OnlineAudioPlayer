@@ -10,17 +10,21 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },  
+  server: {
+    port: 3000,
+    proxy: {
+      '/api': 'http://localhost:8000'
+    }
   },
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@import "@/assets/scss/_variable.scss";`
+        additionalData: `
+          @use "@/assets/scss/mixins";
+          @import "@/assets/scss/base.scss";
+        `
       }
-    }
-  },
-  server: {
-    proxy: {
-      '/api': 'http://localhost:8000'
     }
   }
 });

@@ -13,7 +13,7 @@ const emit = defineEmits<{
 
 <template>
     <header>
-        <router-link to="home" class="logo">Audio Player</router-link>
+        <h1>Audio Player</h1>
 
         <nav>
             <template v-if="isAuthenticated">
@@ -30,16 +30,14 @@ const emit = defineEmits<{
     </header>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .logo {
     font-size: 2rem;
     font-weight: bold;
 }
 
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include Flex(space-between);
     padding: 1rem 2rem;
 }
 

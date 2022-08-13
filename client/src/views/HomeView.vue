@@ -1,7 +1,3 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
     <section class="container">
         <div class="description item">
@@ -19,7 +15,7 @@
     </section>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 section.container {
     height: 100%;
     display: grid;
@@ -34,15 +30,15 @@ section.container {
         margin: 0 auto;
         padding: 1rem;
         gap: 2.5rem;
-        color: $text-color;
+        color: $primary-color;
 
         h1 {
-            font-size: 4rem;
+            font-size: clamp(2.5rem, 3.5vw, 4rem);
             letter-spacing: 3px;
         }
 
         p {
-            font-size: 1.4rem;
+            font-size: clamp(1.3rem, 2vw, 1.5rem);
             line-height: 1.4;
             letter-spacing: 0.5px;
         }
@@ -51,20 +47,42 @@ section.container {
             display: inline-block;
             margin-right: 1.5rem;
             padding: 1rem 1.5rem;
-            font-size: 1.4rem;
-            color: $text-color;
-            border: 2px solid #8e9eab;
+            font-size: clamp(1.3rem, 2vw, 1.4rem);
+            color: $primary-color;
+            border: 2px solid $primary-color;
             border-radius: 3px;
-            transition: box-shadow $time-anim, color $time-anim;
+            transition: all $time-anim;
 
             &:hover {
-                box-shadow: inset 110px 0 0 0 #8e9eab;
+                box-shadow: inset 110px 0 0 0 $btn-color;
+                border-color: $btn-color;
+                color: black;
             }
         }
     }
 
     .background {
         background: url("headphone-background.jpg") no-repeat bottom/cover;
+    }
+
+    @media only screen and (max-width: 860px) {
+        grid-template-columns: 1.5fr 1fr;
+    }
+
+    @media only screen and (max-width: 600px) {
+        grid-template-columns: 1fr;
+
+        .description {
+            align-items: center;
+
+            p {
+                text-align: justify;
+            }
+        }
+
+        .background {
+            display: none;
+        }
     }
 }
 </style>

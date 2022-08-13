@@ -27,15 +27,13 @@ const {
     errorMessage: emailError, 
     meta: emailMeta,
     handleChange: emailHandleChange, 
-    handleBlur: emailHandleBlur
-} = useField("email", undefined, { initialValue: "john@mail.com", validateOnValueUpdate: false });
+} = useField<string>("email", undefined, { initialValue: "", validateOnValueUpdate: false });
 const { 
     value: passwordValue, 
     errorMessage: passwordError, 
     meta: passwordMeta,
     handleChange: passwordHandleChange, 
-    handleBlur: passwordHandleBlur
-} = useField("password", undefined, { initialValue: "John2022", validateOnValueUpdate: false });
+} = useField<string>("password", undefined, { initialValue: "", validateOnValueUpdate: false });
 
 
 const onSubmit = form.handleSubmit(async (formData) => {
@@ -53,35 +51,47 @@ const isSubmitting = form.isSubmitting;
 </script>
 
 <template>
-    <form @submit.prevent="onSubmit">
-        <Field 
-            v-model="emailValue" 
-            type="email" name="email" label="Adresse email" 
-            :error="emailError"
-            :meta="emailMeta"
-            :handleBlur="emailHandleChange"
-            :handleChange="emailHandleBlur"
-        />
+    <div class="container">
+        <form @submit.prevent="onSubmit">
+            <Field 
+                v-model="emailValue" 
+                type="email" name="email" label="Adresse email" 
+                icon="email"
+                :error="emailError"
+                :meta="emailMeta"
+                :handleChange="emailHandleChange"
+            />
 
-        <FieldPassword
-            v-model="passwordValue" 
-            name="password" label="Mot de passe" 
-            :error="passwordError"
-            :meta="passwordMeta"
-            :handleBlur="passwordHandleChange"
-            :handleChange="passwordHandleBlur"
-        />
+            <FieldPassword
+                v-model="passwordValue" 
+                name="password" label="Mot de passe" 
+                :error="passwordError"
+                :meta="passwordMeta"
+                :handleChange="passwordHandleChange"
+            />
 
-        <p v-if="errorLogin">{{ errorLogin }}</p>
+            <p v-if="errorLogin">{{ errorLogin }}</p>
 
-        <Button type="submit" @click="onSubmit" :disabled="isSubmitting">Connexion</Button>
-        <Button type="button" @click="() => form.resetForm()">Réinitialiser</Button>
-    </form>
+            <Button type="submit" @click="onSubmit" :disabled="isSubmitting">Connexion</Button>
+            <Button type="reset" @click="() => form.resetForm()">Réinitialiser</Button>
+        </form>
+    </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 form {
-    max-width: 600px;
+    width: 400px;
     margin: 0 auto;
+}
+
+button {
+    margin-right: 2rem;
+    margin-top: 1rem;
+}
+
+.container {
+    height: 100%;
+    @include Flex(center);
+    background: $bg-color;
 }
 </style>

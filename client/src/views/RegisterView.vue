@@ -35,29 +35,25 @@ const {
     errorMessage: usernameError, 
     meta: usernameMeta, 
     handleChange: usernameHandleChange, 
-    handleBlur: usernameHandleBlur 
-} = useField("username", undefined, { initialValue: "John", validateOnValueUpdate: false });
+} = useField<string>("username", undefined, { initialValue: "", validateOnValueUpdate: false });
 const { 
     value: emailValue, 
     errorMessage: emailError, 
     meta: emailMeta,
     handleChange: emailHandleChange, 
-    handleBlur: emailHandleBlur
-} = useField("email", undefined, { initialValue: "john@mail.com", validateOnValueUpdate: false });
+} = useField<string>("email", undefined, { initialValue: "", validateOnValueUpdate: false });
 const { 
     value: passwordValue, 
     errorMessage: passwordError, 
     meta: passwordMeta,
     handleChange: passwordHandleChange, 
-    handleBlur: passwordHandleBlur
-} = useField("password", undefined, { initialValue: "John2022", validateOnValueUpdate: false });
+} = useField<string>("password", undefined, { initialValue: "", validateOnValueUpdate: false });
 const { 
     value: confirmPwdValue, 
     errorMessage: confirmPwdError, 
     meta: confirmPwdMeta,
     handleChange: confirmPwdHandleChange, 
-    handleBlur: confirmPwdHandleBlur
-} = useField("confirmPassword", undefined, { initialValue: "John2022", validateOnValueUpdate: false });
+} = useField<string>("confirmPassword", undefined, { initialValue: "", validateOnValueUpdate: false });
 
 const onSubmit = form.handleSubmit(async (formData) => {    
     try {      
@@ -78,68 +74,72 @@ const isSubmitting = form.isSubmitting;
 </script>
 
 <template>
-    <form @submit.prevent="onSubmit">
-        <Field 
-            v-model="usernameValue" 
-            type="text" name="username" label="Nom d'utilisateur" 
-            :error="usernameError"
-            :meta="usernameMeta"
-            :handleChange="usernameHandleBlur"
-            :handleBlur="usernameHandleChange"
-        />
+    <div class="container">   
+        <form @submit.prevent="onSubmit">
+            <Field 
+                v-model="usernameValue" 
+                type="text" name="username" label="Nom d'utilisateur" 
+                icon="user"
+                :error="usernameError"
+                :meta="usernameMeta"
+                :handleChange="usernameHandleChange"
+            />
 
-        <Field 
-            v-model="emailValue" 
-            type="email" name="email" label="Adresse email" 
-            :error="emailError"
-            :meta="emailMeta"
-            :handleBlur="emailHandleChange"
-            :handleChange="emailHandleBlur"
-        />
+            <Field 
+                v-model="emailValue" 
+                type="email" name="email" label="Adresse email" 
+                icon="email"
+                :error="emailError"
+                :meta="emailMeta"
+                :handleChange="emailHandleChange"
+            />
 
-        <FieldPassword
-            v-model="passwordValue" 
-            name="password" label="Mot de passe" 
-            :error="passwordError"
-            :meta="passwordMeta"
-            :handleBlur="passwordHandleChange"
-            :handleChange="passwordHandleBlur"
-        />
+            <FieldPassword
+                v-model="passwordValue" 
+                name="password" label="Mot de passe" 
+                :error="passwordError"
+                :meta="passwordMeta"
+                :handleChange="passwordHandleChange"
+            />
 
-        <FieldPassword
-            v-model="confirmPwdValue" 
-            name="confirmPwd" label="Confirmer le mot de passe" 
-            :error="confirmPwdError"
-            :meta="confirmPwdMeta"
-            :handleBlur="confirmPwdHandleChange"
-            :handleChange="confirmPwdHandleBlur"
-        />
+            <FieldPassword
+                v-model="(confirmPwdValue as string)" 
+                name="confirmPwd" label="Confirmer le mot de passe" 
+                :error="confirmPwdError"
+                :meta="confirmPwdMeta"
+                :handleChange="confirmPwdHandleChange"
+            />
 
-        <p v-if="errorRegister">{{ errorRegister }}</p>
+            <p v-if="errorRegister">{{ errorRegister }}</p>
 
-        <Button type="submit" @click="onSubmit" :disabled="isSubmitting">S'inscrire</Button>
-        <Button type="button" @click="() => form.resetForm()">Réinitialiser</Button>
-    </form>
+            <div class="btn-action">
+                <Button type="submit" @click="onSubmit" :disabled="isSubmitting">S'inscrire</Button>
+                <Button type="reset" @click="() => form.resetForm()">Réinitialiser</Button>
+            </div>
+        </form>
+    </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 form {
-    max-width: 600px;
+    width: 400px;
     margin: 0 auto;
-    font-size: 1.4rem;
+    padding: 1rem;
 }
 
-small {
-    color: red;
+.btn-action {
+    @include Flex(flex-start);
+    gap: 2rem;
+    padding-top: 2rem;
+
+    @media only screen and (max-width: 500px) {
+        justify-content: center;
+    }
 }
 
-button {
-    background-color: var(--btn-color);
-    border-radius: 10px;
-    color: black;
-    padding: 7px 10px;
-    letter-spacing: 0.3px;
-    cursor: pointer;
-    font-weight: bold;
+.container {
+    height: 100%;
+    @include Flex(center);
+    background: $bg-color;
 }
 </style>

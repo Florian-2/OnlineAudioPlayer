@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import Button from "../Button.vue";
+import IconEye from "../icons/IconEye.vue";
+import IconEyeSlash from "../icons/IconEyeSlash.vue";
 
 
 defineProps<{
@@ -7,8 +10,7 @@ defineProps<{
     name: string;
     modelValue: string;
     error: any;
-    handleChange: (payload: FocusEvent) => void,
-    handleBlur: (payload: FocusEvent) => void,
+    handleChange: (payload: Event) => void,
     meta: { touched: boolean, valid: boolean, validated: boolean }
 }>()
 
@@ -29,30 +31,43 @@ const handleShowPassword = (): boolean => showPassword.value = !showPassword.val
 <template>
     <div class="form-group">
         <label :for="name">{{ label }}</label>
-        <input 
-            :value="modelValue"
-            @input="updateValue" 
-            :type="showPassword ? 'text' : 'password'" :id="name" :name="name"
-            @blur="handleChange"
-            @focus="handleBlur"
-            :class="{ 'error': meta.touched && !meta.valid && meta.validated }"  
-        />
 
-        <button type="button" @click="handleShowPassword">
-            <img v-if="!showPassword" src="../icons/eye.svg" alt="eye">
-            <img v-else src="../icons/eye-slash.svg" alt="eye-slash">
-        </button>
+        <div class="input">
+            <input 
+                :value="modelValue"
+                @input="updateValue" 
+                :type="showPassword ? 'text' : 'password'" :id="name" :name="name"
+                @blur="handleChange"
+                @change="handleChange"
+                :class="{ 'error': meta.touched && !meta.valid && meta.validated }"  
+            />
+
+            <button type="button" @click="handleShowPassword">
+                <IconEye v-if="!showPassword" color="white"/>
+                <IconEyeSlash v-else color="white"/>
+            </button>
+        </div>
 
         <small v-if="error">{{ error }}</small>
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .error {
     border: 2px solid red;
 }
 
-img {
-    width: 15px;
+.input {
+    position: relative;
+}
+
+button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    transform: translate(0, -45%);
+    top: 50%;
 }
 </style>
