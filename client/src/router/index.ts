@@ -17,6 +17,15 @@ const router = createRouter({
 			component: HomeView
 		},
 		{
+			path: "/music-management",
+			name: "Music Management",
+			meta: {
+				title: "AudioPlayer - Gérer mes musiques"
+			},
+			beforeEnter: [isAuthenticated],
+		 	component: () => import('@/views/AddMusicView.vue')
+		},
+		{
 			path: "/audio-player",
 			name: "Player",
 			meta: {

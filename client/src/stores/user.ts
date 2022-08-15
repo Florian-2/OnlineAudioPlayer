@@ -37,7 +37,6 @@ export const useUser = defineStore("user", {
 				this.currentUser = user;		
 			} 
 			catch (error) {
-				console.log(error);
 				throw error;
 			}
 		},
@@ -47,7 +46,6 @@ export const useUser = defineStore("user", {
 				this.currentUser = null;
 			} 
 			catch (error) {
-				console.log(error);
 				throw error;
 			}
 		},
@@ -58,7 +56,6 @@ export const useUser = defineStore("user", {
 			} 
 			catch (error) {
 				this.loaded = true;
-				console.log(error);
 			}
 		}
 	}

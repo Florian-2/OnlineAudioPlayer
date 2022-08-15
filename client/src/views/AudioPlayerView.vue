@@ -1,11 +1,8 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 </script>
 
 <template>
     <h1>Lecteur audio</h1>
+
 </template>
-
-<style scoped>
-
-</style>
