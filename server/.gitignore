@@ -1,3 +1,5 @@
 node_modules
 .env
 src/keys/*.key*
+src/public/upload/music/*
+src/public/upload/thumbnail/*

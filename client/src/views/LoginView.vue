@@ -51,7 +51,9 @@ const isSubmitting = form.isSubmitting;
 </script>
 
 <template>
-    <div class="container">
+    <div class="form-container">
+        <h1>Connexion</h1>
+
         <form @submit.prevent="onSubmit">
             <Field 
                 v-model="emailValue" 
@@ -72,26 +74,42 @@ const isSubmitting = form.isSubmitting;
 
             <p v-if="errorLogin">{{ errorLogin }}</p>
 
-            <Button type="submit" @click="onSubmit" :disabled="isSubmitting">Connexion</Button>
-            <Button type="reset" @click="() => form.resetForm()">Réinitialiser</Button>
+            <div class="btn-action">
+                <Button type="submit" @click="onSubmit" :disabled="isSubmitting">Connexion</Button>
+                <Button type="reset" @click="() => form.resetForm()">Réinitialiser</Button>
+            </div>
         </form>
     </div>
 </template>
 
 <style lang="scss" scoped>
 form {
-    width: 400px;
+    max-width: 400px;
+    width: 100%;
     margin: 0 auto;
+    padding: 1rem;
 }
 
-button {
-    margin-right: 2rem;
-    margin-top: 1rem;
+.btn-action {
+    @include Flex(flex-start);
+    gap: 2rem;
+    padding-top: 2rem;
+
+    @media only screen and (max-width: 500px) {
+        justify-content: center;
+    }
 }
 
-.container {
+.form-container {
     height: 100%;
     @include Flex(center);
-    background: $bg-color;
+    flex-direction: column;
+    gap: 2.5rem;
+
+    h1 {
+        align-self: center;
+        font-size: clamp(2.2rem, 3vw, 3rem);
+        color: $first-color;
+    }
 }
 </style>

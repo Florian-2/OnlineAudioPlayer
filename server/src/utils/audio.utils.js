@@ -12,10 +12,14 @@ export function getThumbnailAudioFile(filename) {
     return path.join(__dirname, "src", "public", "upload", "thumbnail", filename);
 }
 
+export function exctractFileName(originalname) {
+    return originalname.substring(0, originalname.lastIndexOf('.'));
+}
+
 export async function createThumbnail(metadata, filename) {
     const mimeType = {
         "image/jpeg": "jpg",
-        "image/png": "png",
+        "image/png": "png"
     }
 
     if (metadata.picture) {
@@ -36,11 +40,14 @@ export async function createMusicList(files) {
     const musics = [];
 
     for (const file of files) {
-        const path = getAudioFile(file.filename);
+        const filePath = getAudioFile(file.filename);
 
-        const metadata = await parseFile(path);
+        const metadata = await parseFile(filePath);
+        if (!metadata.common.title) {
+            metadata.common.title = exctractFileName(file.originalname);
+        }
         metadata.common.size = file.size;
-        metadata.common.urlMusic = path;
+        metadata.common.urlMusic = filePath;
         const pathPicture = await createThumbnail(metadata.common, file.filename);
         metadata.common.thumbnail = pathPicture;
 

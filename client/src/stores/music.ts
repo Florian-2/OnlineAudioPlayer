@@ -14,7 +14,7 @@ export const useMusic = defineStore("music", {
 				this.musics = musics;
 			} 
 			catch (error) {				
-				console.log(error);
+				throw error;
 			}
 		}
 	}

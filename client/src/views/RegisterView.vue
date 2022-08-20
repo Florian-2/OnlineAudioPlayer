@@ -74,7 +74,9 @@ const isSubmitting = form.isSubmitting;
 </script>
 
 <template>
-    <div class="container">   
+    <div class="form-container">   
+        <h1>Inscription</h1>
+
         <form @submit.prevent="onSubmit">
             <Field 
                 v-model="usernameValue" 
@@ -122,7 +124,8 @@ const isSubmitting = form.isSubmitting;
 
 <style lang="scss" scoped>
 form {
-    width: 400px;
+    max-width: 400px;
+    width: 100%;
     margin: 0 auto;
     padding: 1rem;
 }
@@ -137,9 +140,16 @@ form {
     }
 }
 
-.container {
+.form-container {
     height: 100%;
     @include Flex(center);
-    background: $bg-color;
+    flex-direction: column;
+    gap: 2.5rem;
+
+    h1 {
+        align-self: center;
+        font-size: clamp(2.2rem, 3vw, 3rem);
+        color: $first-color;
+    }
 }
 </style>

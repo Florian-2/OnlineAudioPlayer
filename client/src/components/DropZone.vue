@@ -1,19 +1,45 @@
 <script lang="ts" setup>
 import { useMusic } from '@/stores/music';
+import { AxiosError } from "axios";
 import { ref, watch } from 'vue';
 import Button from './Button.vue';
 import IconCross from './icons/IconCross.vue';
+import Error from './Error.vue';
 
 const dt = new DataTransfer();
 const musicStore = useMusic();
 const inputFiles = ref<FileList | null>(null);
 const active = ref<boolean>(false);
+const pending = ref<boolean>(false);
+const errorServer = ref<string>("");
+const showError = ref<boolean>(false);
+const mimeTypeAudio = ["audio/mpeg", "audio/mp4", "audio/flac", "audio/x-wav", "audio/ogg", "audio/basic"];
 
 watch(inputFiles, () => {
-    console.log(inputFiles.value);
-})
+    if (inputFiles.value) {
+        for (let i = 0; i < inputFiles.value.length; i++) {
+            const file = inputFiles.value.item(i);
+            
+            if (file) {
+                if (!mimeTypeAudio.includes(file.type)) {
+                    removeFile(i);
+                }
+                else if (file.size > 36_700_160) { // 35MO
+                    console.log(file);
+                
+                    errorServer.value = "La taille est limitée à 35Mo par fichier.";
+                    showError.value = true;
+                    removeFile(i);
+                }
+            }
+        }
+    }    
+});
 
 const toggleActive = () => active.value = !active.value;
+const toggleError = () => showError.value = !showError.value;
+
+const convertBytesToMegaBytes = (bytes: number) =>  (bytes / (1024 ** 2)).toFixed(2);
 
 function addFileToDataTransfer() {
     for (let i = 0; i < inputFiles.value?.length!; i++) {
@@ -27,9 +53,10 @@ function handleChange(e: Event) {
     addFileToDataTransfer();
 }
 
-function dropFile(e: DragEvent) {
+function dropFile(e: DragEvent) {    
     inputFiles.value = e.dataTransfer?.files!;
     addFileToDataTransfer();
+    toggleActive();
 }
 
 function removeFile(id: number) {
@@ -40,11 +67,20 @@ function removeFile(id: number) {
 async function handleSubmit() {
     try {
         if (inputFiles.value && inputFiles.value.length > 0) {
+            pending.value = true;
             await musicStore.addMusic(inputFiles.value!);
+            inputFiles.value = null;
+            pending.value = false;
         }
     } 
     catch (error) {
-        console.log(error);
+        if (error instanceof AxiosError) {        
+            errorServer.value = error.response?.data.message;
+            showError.value = true;
+        }
+    }
+    finally {
+        pending.value = false;
     }
 }
 </script>
@@ -59,25 +95,34 @@ async function handleSubmit() {
             class="dropzone"
             :class="{ 'active-dropzone': active }"
         >
-            <span>Glisser déposer un fichier ici</span>
+            <span>Glisser déposer vos fichiers ici</span>
             <span>OU</span>
             <form @submit.prevent="handleSubmit">
-                <label for="music" id="musics">Sélectionner un fichier</label>
+                <label for="music" id="musics">Sélectionner des fichiers</label>
                 <input @change="handleChange" type="file" name="musics" id="music" multiple>
             </form>
         </div>
 
         <div class="files">
-            <div class="file" v-for="(file, id) in inputFiles" :key="id">
-                <p>{{ file.name }}</p>
-                <button @click="removeFile(id)">
-                    <IconCross color="#000000" ></IconCross>
-                </button>
+            <div class="container-files">
+                <div class="file" v-for="(file, id) in inputFiles" :key="id">
+                    <p>{{ file.name }} ({{ convertBytesToMegaBytes(file.size) + "Mo" }})</p>
+
+                    <button @click="removeFile(id)">
+                        <IconCross color="#000000"></IconCross>
+                    </button>
+                </div>
             </div>
             
-            <Button type="button" @click="handleSubmit">Envoyer</Button>
+            <Button type="button" @click="handleSubmit" :disabled="pending">{{ pending ? "Chargement..." : "Envoyer" }}</Button>
         </div>
     </div>
+
+   <Error 
+        v-if="showError" 
+        :message="errorServer"
+        @click="toggleError"
+    />
 </template>
 
 <style lang="scss" scoped>
@@ -86,17 +131,36 @@ async function handleSubmit() {
     margin: 2rem auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 3rem;
 
     .files {
         display: flex;
         flex-direction: column;
         gap: 1rem;
 
+        .container-files {
+            height: 300px;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            overflow-y: auto;
+            border: 2px solid $primary-color;
+            border-radius: 3px
+        }
+
         .file {
             @include Flex(space-between);
             padding: 0.5rem;
-            background-color: $primary-color;
+            background-color: $first-color;
             border-radius: 3px;
+
+            p {
+                display: inline;
+                margin-left: 1rem;
+                color: $second-color;
+                font-size: clamp(1.4rem, 2vw, 1.5rem);
+            }
 
             button {
                 background-color: transparent;
@@ -105,7 +169,7 @@ async function handleSubmit() {
                 transition: all 250ms;
 
                 &:hover {
-                    background-color: white;
+                    background-color: $first-color;
                 }
             }
         }
@@ -118,27 +182,21 @@ async function handleSubmit() {
     row-gap: 1.5rem;
 }
 
-p {
-    color: white;
-    font-size: 1.6rem;
-}
-
 .dropzone {
-    max-width: 400px;
-    height: 200px;
-    border: 2px dashed $primary-color;
+    height: 300px;
+    border: 2px dashed $first-color;
     border-radius: 5px;
     transition: 250ms ease all;
 
     span {
-        font-size: clamp(1.2rem, 2vw, 1.5rem);
-        color: $primary-color;
+        font-size: clamp(1.4rem, 2vw, 1.7rem);
+        color: $first-color;
     }
 
     label {
         padding: 0.8rem 1.2rem;
-        color: white;
-        background-color: $primary-color;
+        color: $second-color;
+        background-color: $first-color;
         border-radius: 3px;
         transition: 250ms ease all;
     }
@@ -149,10 +207,15 @@ p {
 }
 
 .active-dropzone {
-    background-color: $primary-color;
+    background-color: $first-color;
     
-    span, label {
+    span {
         color: $trois-color;
+    }
+
+    label {
+        background-color: $second-color;
+        color: $first-color;
     }
 }
 </style>
