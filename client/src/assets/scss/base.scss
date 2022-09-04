@@ -2,3 +2,43 @@
 @import "./variables";
 @import "./mixins";
 @import "./reset.scss";
+
+// Formulaire
+form {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.btn-action {
+    @include Flex(center);
+    gap: 2rem;
+    padding-top: 2rem;
+}
+
+.form-container {
+    height: 100%;
+    @include Flex(center);
+    flex-direction: column;
+    gap: 2.5rem;
+
+    h1 {
+        align-self: center;
+        font-size: clamp(2.2rem, 3vw, 3rem);
+        color: $first-color;
+    }
+}
+
+.question-form {
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
+    color: white;
+
+    a {
+        color: rgb(169, 1, 169);
+        
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

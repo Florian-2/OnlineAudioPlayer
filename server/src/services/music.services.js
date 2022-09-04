@@ -16,3 +16,18 @@ export const addMusic = async (musics, userID) => {
         throw error;
     }
 }
+
+export const getAllMusics = async (userID) => {
+    try {
+        const musics = await Music.find({ "user_id": userID });
+
+        if (musics.length === 0) {
+            throw new Error("Vous n'avez pas de musiques");
+        }
+
+        return musics;
+    } 
+    catch (error) {
+        throw error;
+    }
+}

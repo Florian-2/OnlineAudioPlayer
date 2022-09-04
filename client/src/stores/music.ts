@@ -1,21 +1,32 @@
 import { defineStore } from "pinia";
-import { addMusic } from "@/services/music.services";
+import { addMusic, fetchMusics } from "@/services/music.services";
 import type { MusicState } from "@/shared/interfaces/music.interface";
 
 
 export const useMusic = defineStore("music", {
 	state: (): MusicState => ({
-		musics: null
+		musics: [],
+		loaded: false,
+		needRefresh: false,
 	}),
 	actions: {
-		async addMusic (files: FileList) {
+		async addMusic (files: File[]) {
 			try {				
 				const musics = await addMusic(files);
 				this.musics = musics;
 			} 
-			catch (error) {				
+			catch (error) {	
+				throw error;
+			}
+		},
+		async fetchMusics() {
+			try {
+				const musics = await fetchMusics();
+				this.musics = musics;
+			} 
+			catch (error) {
 				throw error;
 			}
 		}
 	}
-})
+});

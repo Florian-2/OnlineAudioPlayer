@@ -6,9 +6,8 @@ import Button from './Button.vue';
 import IconCross from './icons/IconCross.vue';
 import Error from './Error.vue';
 
-const dt = new DataTransfer();
 const musicStore = useMusic();
-const inputFiles = ref<FileList | null>(null);
+const inputFiles = ref<File[]>([]);
 const active = ref<boolean>(false);
 const pending = ref<boolean>(false);
 const errorServer = ref<string>("");
@@ -18,58 +17,51 @@ const mimeTypeAudio = ["audio/mpeg", "audio/mp4", "audio/flac", "audio/x-wav", "
 watch(inputFiles, () => {
     if (inputFiles.value) {
         for (let i = 0; i < inputFiles.value.length; i++) {
-            const file = inputFiles.value.item(i);
+            const file = inputFiles.value[i];
             
             if (file) {
                 if (!mimeTypeAudio.includes(file.type)) {
                     removeFile(i);
                 }
-                else if (file.size > 36_700_160) { // 35MO
-                    console.log(file);
-                
+                else if (file.size > 16_700_160) { // 35MO 36_700_160         
                     errorServer.value = "La taille est limitée à 35Mo par fichier.";
                     showError.value = true;
                     removeFile(i);
                 }
             }
         }
-    }    
-});
+    }
+}, { deep: true });
 
 const toggleActive = () => active.value = !active.value;
 const toggleError = () => showError.value = !showError.value;
 
 const convertBytesToMegaBytes = (bytes: number) =>  (bytes / (1024 ** 2)).toFixed(2);
 
-function addFileToDataTransfer() {
-    for (let i = 0; i < inputFiles.value?.length!; i++) {
-        dt.items.add(inputFiles.value?.item(i)!);
+function handleChange(e: Event) {
+    const input = e.target as HTMLInputElement;
+
+    if (input.files) {
+        inputFiles.value.push(...input.files);
     }
 }
 
-function handleChange(e: Event) {
-    const input = e.target as HTMLInputElement;
-    inputFiles.value = input.files;
-    addFileToDataTransfer();
-}
-
-function dropFile(e: DragEvent) {    
-    inputFiles.value = e.dataTransfer?.files!;
-    addFileToDataTransfer();
+function dropFile(e: DragEvent) {
+    if (e.dataTransfer?.files) {
+        inputFiles.value.push(...e.dataTransfer?.files);
+    }
+    
     toggleActive();
 }
 
-function removeFile(id: number) {
-    dt.items.remove(id);
-    inputFiles.value = dt.files;
-}
+const removeFile = (index: number) => inputFiles.value.splice(index, 1);
 
 async function handleSubmit() {
     try {
         if (inputFiles.value && inputFiles.value.length > 0) {
             pending.value = true;
-            await musicStore.addMusic(inputFiles.value!);
-            inputFiles.value = null;
+            await musicStore.addMusic(inputFiles.value);
+            inputFiles.value = [];
             pending.value = false;
         }
     } 
@@ -86,7 +78,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-    <div class="container">
+    <div class="container">  
         <div
             @dragenter.prevent="toggleActive"
             @dragleave.prevent="toggleActive"
@@ -113,16 +105,16 @@ async function handleSubmit() {
                     </button>
                 </div>
             </div>
-            
-            <Button type="button" @click="handleSubmit" :disabled="pending">{{ pending ? "Chargement..." : "Envoyer" }}</Button>
         </div>
-    </div>
 
-   <Error 
-        v-if="showError" 
-        :message="errorServer"
-        @click="toggleError"
-    />
+        <Error 
+            v-if="showError" 
+            :message="errorServer"
+            @click="toggleError"
+        />
+        
+        <Button btnType="primary" type="button" @click="handleSubmit" :disabled="pending">{{ pending ? "Chargement..." : "Envoyer" }}</Button>
+    </div>
 </template>
 
 <style lang="scss" scoped>
@@ -131,6 +123,7 @@ async function handleSubmit() {
     margin: 2rem auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: 300px 50px;
     gap: 3rem;
 
     .files {
@@ -139,17 +132,18 @@ async function handleSubmit() {
         gap: 1rem;
 
         .container-files {
-            height: 300px;
+            height: 100%;
             padding: 0.5rem;
             display: flex;
             flex-direction: column;
             gap: 1rem;
             overflow-y: auto;
-            border: 2px solid $primary-color;
+            border: 2px solid $first-color;
             border-radius: 3px
         }
 
         .file {
+            grid-column: 2 / 3;
             @include Flex(space-between);
             padding: 0.5rem;
             background-color: $first-color;
@@ -174,6 +168,11 @@ async function handleSubmit() {
             }
         }
     }
+
+    Button {
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+    }
 }
 
 .dropzone, form {
@@ -183,7 +182,8 @@ async function handleSubmit() {
 }
 
 .dropzone {
-    height: 300px;
+    height: 100%;
+    margin-bottom: 1.5rem;
     border: 2px dashed $first-color;
     border-radius: 5px;
     transition: 250ms ease all;
@@ -210,7 +210,7 @@ async function handleSubmit() {
     background-color: $first-color;
     
     span {
-        color: $trois-color;
+        color: $second-color;
     }
 
     label {

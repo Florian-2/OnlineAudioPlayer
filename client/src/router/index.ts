@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '@/views/HomeView.vue';
 import { useUser } from '@/stores/user';
 import { isAuthenticated, isNotAuthenticated } from '@/guards/auth.guards';
+import { initialFetchMusics } from '@/services/music.services';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,13 +18,14 @@ const router = createRouter({
 			component: HomeView
 		},
 		{
-			path: "/music-management",
-			name: "Music Management",
-			meta: {
-				title: "AudioPlayer - Gérer mes musiques"
-			},
+			path: "/music-management/add-music",
 			beforeEnter: [isAuthenticated],
-		 	component: () => import('@/views/AddMusicView.vue')
+			component: () => import('@/views/AddMusicView.vue')
+		},
+		{
+			path: '/music-management/handle-music',
+			beforeEnter: [isAuthenticated],
+            component: () => import('@/views/HandleMusicView.vue')
 		},
 		{
 			path: "/audio-player",
@@ -31,7 +33,7 @@ const router = createRouter({
 			meta: {
 				title: "AudioPlayer - Mes musiques"
 			},
-			beforeEnter: [isAuthenticated],
+			beforeEnter: [isAuthenticated, initialFetchMusics],
 		 	component: () => import('@/views/AudioPlayerView.vue')
 		},
 		{
@@ -75,7 +77,7 @@ const router = createRouter({
 			meta: {
 				title: "AudioPlayer - Page introuvable"
 			},
-			component: () => import("@/views/NotFoundView.vue")
+			component: () => import("@/views/NotFoundView.vue"),
 		}
 	]
 })
@@ -87,12 +89,9 @@ router.beforeEach(async () => {
 	}
 });
 
-router.afterEach((to, from) => {
-	const title = to.meta.title;
-
-	if (typeof title === "string") {
-		document.title = title;
-	}
+router.afterEach((to) => {
+	const title = to.meta.title as string;
+	document.title = title;
 });
 
 export default router;

@@ -115,41 +115,14 @@ const isSubmitting = form.isSubmitting;
             <p v-if="errorRegister">{{ errorRegister }}</p>
 
             <div class="btn-action">
-                <Button type="submit" @click="onSubmit" :disabled="isSubmitting">S'inscrire</Button>
-                <Button type="reset" @click="() => form.resetForm()">Réinitialiser</Button>
+                <Button btnType="primary" type="submit" @click="onSubmit" :disabled="isSubmitting">S'inscrire</Button>
+                <Button btnType="danger" type="reset" @click="() => form.resetForm()">Réinitialiser</Button>
             </div>
         </form>
+
+        <p class="question-form">
+            Vous avez un compte ? 
+            <RouterLink to="/login">Connexion</RouterLink>
+        </p>
     </div>
 </template>
-
-<style lang="scss" scoped>
-form {
-    max-width: 400px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 1rem;
-}
-
-.btn-action {
-    @include Flex(flex-start);
-    gap: 2rem;
-    padding-top: 2rem;
-
-    @media only screen and (max-width: 500px) {
-        justify-content: center;
-    }
-}
-
-.form-container {
-    height: 100%;
-    @include Flex(center);
-    flex-direction: column;
-    gap: 2.5rem;
-
-    h1 {
-        align-self: center;
-        font-size: clamp(2.2rem, 3vw, 3rem);
-        color: $first-color;
-    }
-}
-</style>
