@@ -17,9 +17,9 @@ watch(() => musicStore.currentMusic.index ,() => {
     }
 })
 
-musicStore.$onAction(({ name }) => {
-    console.log(name);
-})
+// musicStore.$onAction(({ name }) => {
+//     console.log(name);
+// })
 
 function changeSong(indexSong: number) {
     musicStore.selectMusic(indexSong);

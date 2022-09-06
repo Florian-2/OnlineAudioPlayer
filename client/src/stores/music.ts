@@ -45,7 +45,7 @@ export const useMusic = defineStore("music", {
 		handleChangeSong(action: string) {
 			action === "next" ? this.currentMusic.index++ : this.currentMusic.index--;
 
-			if (this.currentMusic.index < 1) {
+			if (this.currentMusic.index < 0) {
 				this.currentMusic.index = this.musics.length - 1;
 			} 
 			else if (this.currentMusic.index > this.musics.length - 1) { 
@@ -66,10 +66,7 @@ export const useMusic = defineStore("music", {
 		},
 		play() {
 			this.currentMusic.metadata = this.musics[this.currentMusic.index];
-
-			if (this.currentMusic.audio) {
-				this.currentMusic.audio.oncanplay = () => this.currentMusic.audio?.play();
-			}
+			setTimeout(() => this.currentMusic.audio?.play());
 		},
 		pause() {
 			this.currentMusic.audio?.pause();
