@@ -17,6 +17,14 @@ export interface Music {
 
 export interface MusicState {
     musics: Music[];
-    loaded: boolean;
-    needRefresh: boolean;
+    currentMusic: { 
+        audio: HTMLAudioElement | null;
+        metadata: Music | null;
+        index: number;
+    };
+    fetch: {
+        isLoading: boolean;
+        loaded: boolean;
+        needRefresh: boolean;
+    }
 }

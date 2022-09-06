@@ -19,11 +19,17 @@ const router = createRouter({
 		},
 		{
 			path: "/music-management/add-music",
+			meta: {
+				title: "AudioPlayer - Ajouter des musiques à ma liste"
+			},
 			beforeEnter: [isAuthenticated],
 			component: () => import('@/views/AddMusicView.vue')
 		},
 		{
 			path: '/music-management/handle-music',
+			meta: {
+				title: "AudioPlayer - Gérer mes musiques"
+			},
 			beforeEnter: [isAuthenticated],
             component: () => import('@/views/HandleMusicView.vue')
 		},

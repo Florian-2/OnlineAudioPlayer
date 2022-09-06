@@ -3,13 +3,11 @@ import type { Music } from "@/shared/interfaces/music.interface";
 import { useMusic } from "@/stores/music";
 
 
-export async function addMusic(files: File[]): Promise<Music[]> {
+export async function addMusic(files: Set<File>): Promise<Music[]> {
     try {
         const formData = new FormData();
-        
-        for (const file of files) {
-            formData.append("musics", file);
-        }
+
+        files.forEach((file) => formData.append("musics", file));
 
         const musics = await axios.post("/api/music/add", formData);
         return musics.data;
@@ -33,9 +31,9 @@ export async function initialFetchMusics(): Promise<void> {
     try {
         const musicStore = useMusic();
 
-        if (!musicStore.loaded) {
+        if (!musicStore.fetch.loaded) {
             musicStore.fetchMusics();
-            musicStore.loaded = true;
+            musicStore.fetch.loaded = true;
         }
     } 
     catch (error) {

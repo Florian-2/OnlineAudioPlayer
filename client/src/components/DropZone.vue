@@ -7,7 +7,7 @@ import IconCross from './icons/IconCross.vue';
 import Error from './Error.vue';
 
 const musicStore = useMusic();
-const inputFiles = ref<File[]>([]);
+const inputFiles = ref<Set<File>>(new Set());
 const active = ref<boolean>(false);
 const pending = ref<boolean>(false);
 const errorServer = ref<string>("");
@@ -16,18 +16,17 @@ const mimeTypeAudio = ["audio/mpeg", "audio/mp4", "audio/flac", "audio/x-wav", "
 
 watch(inputFiles, () => {
     if (inputFiles.value) {
-        for (let i = 0; i < inputFiles.value.length; i++) {
-            const file = inputFiles.value[i];
-            
-            if (file) {
-                if (!mimeTypeAudio.includes(file.type)) {
-                    removeFile(i);
-                }
-                else if (file.size > 16_700_160) { // 35MO 36_700_160         
-                    errorServer.value = "La taille est limitée à 35Mo par fichier.";
-                    showError.value = true;
-                    removeFile(i);
-                }
+        console.log(inputFiles.value);
+        
+
+        for (const file of inputFiles.value) {            
+            if (!mimeTypeAudio.includes(file.type)) {
+                inputFiles.value.delete(file);
+            }
+            else if (file.size > 36_700_160) { // 15MO 16_700_160         
+                errorServer.value = "La taille est limitée à 35Mo par fichier.";
+                showError.value = true;
+                inputFiles.value.delete(file);
             }
         }
     }
@@ -42,32 +41,41 @@ function handleChange(e: Event) {
     const input = e.target as HTMLInputElement;
 
     if (input.files) {
-        inputFiles.value.push(...input.files);
+        errorServer.value! &&= "";
+        showError.value! &&= false;
+
+        for (const file of input.files) {
+            inputFiles.value.add(file);
+        }
     }
 }
 
 function dropFile(e: DragEvent) {
     if (e.dataTransfer?.files) {
-        inputFiles.value.push(...e.dataTransfer?.files);
+        errorServer.value! &&= "";
+        showError.value! &&= false;
+
+        for (const file of e.dataTransfer?.files) {
+            inputFiles.value.add(file);
+        }
     }
     
     toggleActive();
 }
 
-const removeFile = (index: number) => inputFiles.value.splice(index, 1);
-
 async function handleSubmit() {
     try {
-        if (inputFiles.value && inputFiles.value.length > 0) {
+        if (inputFiles.value && inputFiles.value.size > 0) {
             pending.value = true;
             await musicStore.addMusic(inputFiles.value);
-            inputFiles.value = [];
+            inputFiles.value.clear();
             pending.value = false;
         }
     } 
     catch (error) {
-        if (error instanceof AxiosError) {        
-            errorServer.value = error.response?.data.message;
+        if (error instanceof AxiosError) { 
+            inputFiles.value.clear();
+            errorServer.value = error.response?.data.message || "Erreur";
             showError.value = true;
         }
     }
@@ -100,7 +108,7 @@ async function handleSubmit() {
                 <div class="file" v-for="(file, id) in inputFiles" :key="id">
                     <p>{{ file.name }} ({{ convertBytesToMegaBytes(file.size) + "Mo" }})</p>
 
-                    <button @click="removeFile(id)">
+                    <button @click="inputFiles.delete(file)">
                         <IconCross color="#000000"></IconCross>
                     </button>
                 </div>

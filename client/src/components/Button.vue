@@ -18,7 +18,7 @@ button {
     border-radius: 3px;
     letter-spacing: 0.5px;
     cursor: pointer;
-    transition: all 500ms;
+    transition: all $transition-time;
 
     &:active {
         transform: scale(0.95);

@@ -1,11 +1,10 @@
-import { MulterError } from "multer";
 import { __dirname } from "../../fs.js";
 import { createMusicList } from "../utils/audio.utils.js"
 import * as Music from "../services/music.services.js"
 
 
 export const addMusic = async (req, res) => {
-    try {       
+    try {  
         const musics = await createMusicList(req.files);
         const result = await Music.addMusic(musics, req.user._id);
 
@@ -13,7 +12,7 @@ export const addMusic = async (req, res) => {
     } 
     catch (error) {
         console.log(error);
-        res.end();
+        res.status(500).json({ message: "Erreur serveur." });
     }
 }
 
@@ -24,6 +23,6 @@ export const getAllMusics = async (req, res) => {
     } 
     catch (error) {
         console.log(error);
-        res.end();
+        res.status(500).json({ message: "Vous n'avez pas encore importé vos musiques." });
     }
 }

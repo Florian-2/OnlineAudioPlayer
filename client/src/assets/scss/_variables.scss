@@ -1,6 +1,6 @@
 // ----- Color ----- //
 $first-color: #ffffff;
-$first-color-light: #d8dadddc;
+$first-color-light: darken($color: $first-color, $amount: 20%);
 $second-color: #252741;
 $danger-color: #f8494f;
 $shadow: 2px 2px 20px 5px rgba(255, 255, 255, 0.1);
