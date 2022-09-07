@@ -58,7 +58,7 @@ const router = createRouter({
 				title: "AudioPlayer - Mes musiques favorites"
 			},
 			beforeEnter: [isAuthenticated],
-		 	component: () => import('@/views/FavoriView.vue')
+		 	component: () => import('@/views/FavorieView.vue')
 		},
 		{
 			path: "/login",

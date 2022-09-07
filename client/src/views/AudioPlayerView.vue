@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import { useMusic } from '@/stores/music';
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import type { Music } from "@/shared/interfaces/index";
 
 
 const musicStore = useMusic();
 const audio = ref<HTMLAudioElement | null>(null);
 const img = ref<HTMLImageElement | null>(null);
+// const currentTime = ref<number>(0);
+// const totalDuration = ref<number>(0);
 
 onMounted(() => musicStore.currentMusic.audio = audio.value);
 
@@ -17,9 +19,19 @@ watch(() => musicStore.currentMusic.index ,() => {
     }
 })
 
-// musicStore.$onAction(({ name }) => {
-//     console.log(name);
-// })
+// function timeFormat(time: number) {    
+//     return Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2);
+// }
+
+// function duration(e: Event) {
+//     console.log(e);
+
+//     currentTime.value = audio.value?.currentTime!;
+//     totalDuration.value = audio.value?.duration!;    
+
+//     return `${timeFormat(currentTime.value)}:${totalDuration.value}`;
+// }
+
 
 function changeSong(indexSong: number) {
     musicStore.selectMusic(indexSong);
@@ -35,6 +47,7 @@ function changeSong(indexSong: number) {
         <audio 
             ref="audio" 
             :src="musicStore.currentMusic?.metadata?.urlMusic" 
+            @timeupdate="musicStore.timeUpdate"
             @ended="musicStore.handleChangeSong('next')" 
             controls
             muted
@@ -48,6 +61,8 @@ function changeSong(indexSong: number) {
         <button @click="musicStore.previous()">précédent</button>
         <button @click="musicStore.next()">suivant</button>
 
+        <p>{{ musicStore.time }}</p>
+
         <div class="musics">
             <p 
                 v-for="(music, i) of musicStore.musics" :key="music._id"
@@ -60,7 +75,7 @@ function changeSong(indexSong: number) {
 </template>
 
 <style scoped>
-p {
+p, span {
     font-size: 1.5rem;
     color: white;
     cursor: pointer;

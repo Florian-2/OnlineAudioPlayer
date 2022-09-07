@@ -20,6 +20,8 @@ export interface MusicState {
     currentMusic: { 
         audio: HTMLAudioElement | null;
         metadata: Music | null;
+        duration: number,
+        currentTime: number,
         index: number;
     };
     fetch: {

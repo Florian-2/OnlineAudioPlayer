@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { addMusic, fetchMusics } from "@/services/music.services";
+import { formatTime } from "@/utils/features";
 import type { MusicState } from "@/shared/interfaces/music.interface";
 
 
@@ -9,14 +10,21 @@ export const useMusic = defineStore("music", {
 		currentMusic: {
 			audio: null,
 			metadata: null,
-			index: 0,
+			currentTime: 0,
+			duration: 0,
+			index: 0
 		},
 		fetch: {
 			isLoading: false,
 			loaded: false,
-			needRefresh: false,
+			needRefresh: false
 		}
 	}),
+	getters: {
+		time({ currentMusic }) {
+			return formatTime(currentMusic.currentTime);
+		}
+	},
 	actions: {
 		async addMusic (files: Set<File>) {
 			try {				
@@ -76,6 +84,12 @@ export const useMusic = defineStore("music", {
 		},
 		next() {
 			this.handleChangeSong("next");
+		},
+		timeUpdate() {
+			if (this.currentMusic.audio) {
+				this.currentMusic.currentTime = this.currentMusic.audio.currentTime;
+				this.currentMusic.duration = this.currentMusic.audio.duration;
+			}
 		}
 	}
 });
