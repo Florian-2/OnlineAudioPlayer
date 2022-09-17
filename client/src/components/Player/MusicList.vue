@@ -11,66 +11,68 @@ defineProps<{
 </script>
 
 <template>
-    <div class="table-list-music">
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Titre</th>
-                    <th>Artiste</th>
-                    <th>Album</th>
-                    <th>Durée</th>
-                </tr>
-            </thead>
+    <div class="table-musics">
+        <div class="thead" role="rowgroup">
+            <span role="columnheader">#</span>
+            <span role="columnheader">Titre</span>
+            <span role="columnheader">Artiste</span>
+            <span role="columnheader">Album</span>
+            <span role="columnheader">Durée</span>
+        </div>
 
-            <tbody>
-                <tr v-for="(music, i) of musics" :key="music._id" @click="emit('selectMusic', i)">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ music.title }}</td>
-                    <td>{{ music.artists?.join(" / ") }}</td>
-                    <td>{{ music.album }}</td>
-                    <td>{{ music.formatDuration }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="tbody" role="rowgroup">
+            <div class="row" role="row" v-for="(music, i) of musics" :key="music._id" @click="emit('selectMusic', i)">
+                <span class="flex-row" role="cell">{{ i }}</span>
+                <span class="flex-row" role="cell">{{ music.title }}</span>
+                <span class="flex-row" role="cell">{{ music.artists?.join(" / ") }}</span>
+                <span class="flex-row" role="cell">{{ music.album }}</span>
+                <span class="flex-row" role="cell">{{ music.formatDuration }}</span>
+            </div>
+        </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-.table-list-music {
-    color: white;
+.table-musics {
+    margin: 0 auto;
+    width: 100%;
+    overflow-y: auto;
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    outline: 0;
 
-        thead, tbody {
-            padding: 1rem;
+    .thead, .row {
+        display: grid;
+        grid-template-columns: 30px 2fr 1fr 1fr 0.5fr;
+    }
+
+    span {
+        color: $first-color;
+    }
+
+    .thead {
+        padding-inline: 16px;
+        background-color: rgba(255, 255, 255, 0.11);
+
+        span {
+            font-size: 1.6rem;
+            font-weight: 500;
+        }
+    }
+
+    .row {
+        padding: 1.6rem;
+        border-radius: $raduis;
+        transition: background-color $transition-time;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.086);
         }
 
-        th {
-            font-size: 1.5rem;
-            padding-bottom: 1rem;
-            text-transform: uppercase;
-            text-align: start;
-            // background-color: rgba(240, 248, 255, 0.155);
-
-            &:first-child {
-                width: 30px;
-            }
-        }
-
-        tr {
-            cursor: pointer;
-
-            &:hover {
-                background-color: rgba(240, 248, 255, 0.155);
-            }
-
-            td {
-                padding: 1rem 0;
-                font-size: 1.4rem;
-            }
+        span {
+            font-size: 1.4rem;
         }
     }
 }

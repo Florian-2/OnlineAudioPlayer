@@ -43,7 +43,7 @@ body {
 			padding: 1rem 0.5rem;
 			color: $first-color;
 			background-color: transparent;
-			border-radius: 3px;
+			border-radius: $raduis;
 			border: 2px solid $first-color;
 			outline: none;
 			box-shadow: $shadow;

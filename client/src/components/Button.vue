@@ -15,7 +15,7 @@ button {
     padding: 1rem;
     font-size: clamp(1.25rem, 2vw, 1.5rem);
     background: transparent;
-    border-radius: 3px;
+    border-radius: $raduis;
     letter-spacing: 0.5px;
     cursor: pointer;
     transition: all $transition-time;

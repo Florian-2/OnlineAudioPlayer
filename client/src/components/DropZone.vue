@@ -151,7 +151,7 @@ async function handleSubmit() {
             gap: 1rem;
             overflow-y: auto;
             border: 2px solid $first-color;
-            border-radius: 3px
+            border-radius: $raduis
         }
 
         .file {
@@ -159,7 +159,7 @@ async function handleSubmit() {
             @include Flex(space-between);
             padding: 0.5rem;
             background-color: $first-color;
-            border-radius: 3px;
+            border-radius: $raduis;
 
             p {
                 display: inline;
@@ -171,7 +171,7 @@ async function handleSubmit() {
             button {
                 background-color: transparent;
                 border: none;
-                border-radius: 3px;
+                border-radius: $raduis;
                 transition: all 250ms;
 
                 &:hover {
@@ -209,7 +209,7 @@ async function handleSubmit() {
         padding: 0.8rem 1.2rem;
         color: $second-color;
         background-color: $first-color;
-        border-radius: 3px;
+        border-radius: $raduis;
         transition: 250ms ease all;
     }
 

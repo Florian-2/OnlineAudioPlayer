@@ -37,7 +37,7 @@ defineProps<{
     justify-content: space-between;
     align-items: center;
     background-color: darken($color: $danger-color, $amount: 5%);
-    border-radius: 3px;
+    border-radius: $raduis;
 
     p {
         color: black;

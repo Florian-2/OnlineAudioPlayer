@@ -70,7 +70,7 @@ nav {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
-        border-radius: 3px;
+        border-radius: $raduis;
         transition: all $transition-time;
         position: relative;
 
