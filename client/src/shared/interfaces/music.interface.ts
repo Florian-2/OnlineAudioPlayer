@@ -8,6 +8,8 @@ export interface Music {
     composer?: string[];
     genre?: string[];
     lyrics?: string[];
+    duration: number;
+    formatDuration: string,
     size: number;
     thumbnail: string;
     urlMusic: string;
@@ -20,13 +22,13 @@ export interface MusicState {
     currentMusic: { 
         audio: HTMLAudioElement | null;
         metadata: Music | null;
-        duration: number,
         currentTime: number,
+        progress: number;
         index: number;
     };
     fetch: {
         isLoading: boolean;
         loaded: boolean;
         needRefresh: boolean;
-    }
+    };
 }

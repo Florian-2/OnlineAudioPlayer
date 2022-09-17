@@ -11,7 +11,7 @@ export const useMusic = defineStore("music", {
 			audio: null,
 			metadata: null,
 			currentTime: 0,
-			duration: 0,
+			progress: 0,
 			index: 0
 		},
 		fetch: {
@@ -21,7 +21,7 @@ export const useMusic = defineStore("music", {
 		}
 	}),
 	getters: {
-		time({ currentMusic }) {
+		currentTime({ currentMusic }) {
 			return formatTime(currentMusic.currentTime);
 		}
 	},
@@ -31,6 +31,7 @@ export const useMusic = defineStore("music", {
 				const musics = await addMusic(files);
 				this.musics = musics;
 				this.currentMusic.metadata = musics[0];
+				this.fetch.needRefresh = true;
 			} 
 			catch (error) {	
 				throw error;
@@ -68,6 +69,14 @@ export const useMusic = defineStore("music", {
 				this.play();
 			}
 		},
+		shuffleMusic() {
+			for (let i = this.musics.length - 1; i > 0; i--) {
+				const nb = Math.floor(Math.random() * (i + 1));
+				[this.musics[i], this.musics[nb]] = [this.musics[nb], this.musics[i]];
+			}
+
+			this.currentMusic.metadata = this.musics[0];
+		},
 		handlePlayPause() {
 			if (this.currentMusic.audio?.paused) this.play();
 			else this.pause();
@@ -85,10 +94,20 @@ export const useMusic = defineStore("music", {
 		next() {
 			this.handleChangeSong("next");
 		},
-		timeUpdate() {
+		setDuration(e: Event) {
+			const audio = e.target as HTMLAudioElement;
+			if (this.currentMusic.metadata) {
+				this.currentMusic.metadata.duration = audio.duration;
+			}
+		},
+		setCurrentTime(e: Event) {
+			const audio = e.target as HTMLAudioElement;
+			this.currentMusic.currentTime = audio.currentTime;
+			this.currentMusic.progress = audio.currentTime / audio.duration;
+		},
+		setProgress(to: number) {
 			if (this.currentMusic.audio) {
-				this.currentMusic.currentTime = this.currentMusic.audio.currentTime;
-				this.currentMusic.duration = this.currentMusic.audio.duration;
+				this.currentMusic.audio.currentTime = to;
 			}
 		}
 	}

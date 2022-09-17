@@ -16,6 +16,10 @@ export function extractFileName(originalname) {
     return originalname.substring(0, originalname.lastIndexOf('.'));
 }
 
+export function formatTime(time) {
+    return Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2);
+}
+
 export async function createThumbnail(metadata, filename) {
     const mimeType = {
         "image/jpeg": "jpg",
@@ -46,6 +50,9 @@ export async function createMusicList(files) {
         if (!metadata.common.title) {
             metadata.common.title = extractFileName(file.originalname);
         }
+        const duration = metadata.format.duration;
+        metadata.common.duration = duration;
+        metadata.common.formatDuration = formatTime(duration);
         metadata.common.size = file.size;
         metadata.common.urlMusic = path.join("music", file.filename);
         const pathPicture = await createThumbnail(metadata.common, file.filename);

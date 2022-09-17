@@ -31,6 +31,14 @@ const musicSchema = mongoose.Schema({
                 type: Array,
                 require: false
             },
+            duration: {
+                type: Number,
+                require: false
+            },
+            formatDuration: {
+                type: String,
+                require: false
+            },
             size: {
                 type: Number,
                 require: false

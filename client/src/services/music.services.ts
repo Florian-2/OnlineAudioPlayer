@@ -28,15 +28,18 @@ export async function fetchMusics(): Promise<Music[]> {
 }
 
 export async function initialFetchMusics(): Promise<void> {
+    const musicStore = useMusic();
+    
     try {
-        const musicStore = useMusic();
-
-        if (!musicStore.fetch.loaded) {
+        if (!musicStore.fetch.loaded || musicStore.fetch.needRefresh) {
             musicStore.fetchMusics();
             musicStore.fetch.loaded = true;
         }
     } 
     catch (error) {
         throw error;
+    }
+    finally {
+        musicStore.fetch.needRefresh = false;
     }
 }

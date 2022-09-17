@@ -38,6 +38,8 @@ const toggleError = () => showError.value = !showError.value;
 const convertBytesToMegaBytes = (bytes: number) =>  (bytes / (1024 ** 2)).toFixed(2);
 
 function handleChange(e: Event) {
+    console.log("INPUT");
+
     const input = e.target as HTMLInputElement;
 
     if (input.files) {
@@ -51,6 +53,8 @@ function handleChange(e: Event) {
 }
 
 function dropFile(e: DragEvent) {
+    console.log("DROP");
+    
     if (e.dataTransfer?.files) {
         errorServer.value! &&= "";
         showError.value! &&= false;
