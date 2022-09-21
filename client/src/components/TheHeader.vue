@@ -67,9 +67,7 @@ nav {
         font-size: 1.4rem;
         padding-block: 0.5rem;
         color: $first-color-light;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
+        @include Ellipsis(nowrap);
         border-radius: $raduis;
         transition: all $transition-time;
         position: relative;

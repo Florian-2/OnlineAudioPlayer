@@ -10,6 +10,7 @@ export const useMusic = defineStore("music", {
 		currentMusic: {
 			audio: null,
 			metadata: null,
+			isPaused: true,
 			currentTime: 0,
 			progress: 0,
 			index: 0
@@ -83,9 +84,11 @@ export const useMusic = defineStore("music", {
 		},
 		play() {
 			this.currentMusic.metadata = this.musics[this.currentMusic.index];
+			this.currentMusic.isPaused = false;
 			setTimeout(() => this.currentMusic.audio?.play());
 		},
 		pause() {
+			this.currentMusic.isPaused = true;
 			this.currentMusic.audio?.pause();
 		},
 		previous() {
@@ -103,9 +106,12 @@ export const useMusic = defineStore("music", {
 		setCurrentTime(e: Event) {
 			const audio = e.target as HTMLAudioElement;
 			this.currentMusic.currentTime = audio.currentTime;
-			this.currentMusic.progress = audio.currentTime / audio.duration;
+
+			if (this.currentMusic.metadata) {
+				this.currentMusic.progress = (audio.currentTime * this.currentMusic.metadata?.duration) / this.currentMusic.metadata?.duration;
+			}
 		},
-		setProgress(to: number) {
+		setProgress(to: number) {		
 			if (this.currentMusic.audio) {
 				this.currentMusic.audio.currentTime = to;
 			}
