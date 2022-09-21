@@ -1,25 +1,57 @@
 <script lang="ts" setup>
+import { useMusic } from '@/stores/music';
+import { onMounted, ref, watchEffect } from 'vue';
 import IconShuffle from '../icons/IconShuffle.vue';
 import IconPrevious from '../icons/IconPrevious.vue';
 import IconPlay from '../icons/IconPlay.vue';
 import IconNext from '../icons/IconNext.vue';
 import IconPause from '../icons/IconPause.vue';
 import IconVolumeHigh from '../icons/IconVolumeHigh.vue';
-import { useMusic } from '@/stores/music';
-import { onMounted, ref, watchEffect } from 'vue';
+import IconVolumeMedium from '../icons/IconVolumeMedium.vue';
+import IconVolumeMute from '../icons/IconVolumeMute.vue';
+import IconVolumeLow from '../icons/IconVolumeLow.vue';
 
 
 const musicStore = useMusic();
 const audio = ref<HTMLAudioElement | null>(null);
 const inputRangeProgressBar = ref(0);
+const inputVolume = ref(20);
 
-onMounted(() => musicStore.currentMusic.audio = audio.value);
+onMounted(() => {
+    if (audio.value) {
+        musicStore.currentMusic.audio = audio.value;
+        audio.value.volume = inputVolume.value / 100;
+    }
+});
 
 watchEffect(() => inputRangeProgressBar.value = musicStore.currentMusic.progress);
 
 function inputRange(e: Event) {
     const input = e.target as HTMLInputElement;    
     musicStore.setProgress(Number(input.value));
+}
+
+function setVolume(e: Event) {
+    const input = e.target as HTMLInputElement;
+    
+    if (audio.value) {
+        const volume = Number(input.value);
+        audio.value.volume = volume / 100;
+        inputVolume.value = volume;
+    }
+}
+
+function muteOrDemute() {
+    if (audio.value) {
+        if (inputVolume.value === 0) {            
+            audio.value.volume = 0.2;
+            inputVolume.value = 20;
+            return;
+        }
+
+        audio.value.volume = 0;
+        inputVolume.value = 0;
+    }
 }
 </script>
 
@@ -60,9 +92,14 @@ function inputRange(e: Event) {
                     <IconShuffle/>
                 </button>
 
-                <button>
-                    <IconVolumeHigh/>
+                <button @click="muteOrDemute">
+                    <IconVolumeMute v-if="inputVolume === 0" />
+                    <IconVolumeLow v-else-if="inputVolume < 20" />
+                    <IconVolumeMedium v-else-if="inputVolume < 60" />
+                    <IconVolumeHigh v-else/>
                 </button>
+
+                <input type="range" min="0" max="100" step="0.5" :value="inputVolume" @input="setVolume">
             </div>
         </div>
             
@@ -88,6 +125,11 @@ function inputRange(e: Event) {
     background-color: $hover-color;
     border-radius: 5px;
     padding: 1rem;
+
+    input[type=range] {
+        height: 5px;
+        cursor: pointer;
+    }
 
     .actions {
         display: grid;
@@ -118,21 +160,10 @@ function inputRange(e: Event) {
     .progress-container {   
         margin-top: 1.5rem;
         width: 100%;
-        // background-color: #727377;
-        // border-radius: 5px;
-        // overflow: hidden;
-        // cursor: pointer;
 
         .progress-bar {
-            height: 5px;
             width: 100%;
             margin-bottom: 0.5rem;
-            border-radius: 5px;
-            background: #4a8ea3;
-            transform-origin: left;
-            // transform: scaleX(0);
-            // background: linear-gradient(100deg, #4a8ea3, #6dd6ef 100%);
-            background: white;
             cursor: pointer;
         }
 
