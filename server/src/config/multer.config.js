@@ -15,8 +15,7 @@ const storage = multer.diskStorage({
         }
     },
     filename (req, file, cb) {
-        const cleanFileName = file.originalname;
-        cb(null, `${Date.now()}-${cleanFileName}`);
+        cb(null, `${Date.now()}-${file.originalname}`);
     }
 });
 
@@ -31,6 +30,7 @@ export const upload = multer({
             return cb(new Error("Seules les formats MP3/MP4/FLAC/WAV/OGG/BASIC sont autorisés"));
         } 
         else {
+            file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf8');
             cb(null, true);
         }
     }

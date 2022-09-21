@@ -42,8 +42,7 @@ defineProps<{
     p {
         color: black;
         font-size: 1.4rem;
-        text-overflow: ellipsis;
-        overflow: hidden;
+        @include Ellipsis(nowrap);
     }
 }
 </style>

@@ -31,7 +31,6 @@ export async function createThumbnail(metadata, filename) {
         const name = filename.split(".")[0];
         const format = metadata.picture[0].format;
         const filePath = getThumbnailAudioFile(`${name}.${mimeType[format]}`);
-        console.log(filePath);
         await fs.writeFile(filePath, buffer);
         return path.join("thumbnail", `${name}.${mimeType[format]}`);
     }

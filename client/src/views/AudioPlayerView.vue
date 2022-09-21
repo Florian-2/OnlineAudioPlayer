@@ -1,47 +1,21 @@
 <script lang="ts" setup>
 import { useMusic } from '@/stores/music';
-import { onMounted, ref, watch } from 'vue';
 import MusicHeader from "../components/Player/MusicHeader.vue";
 import MusicList from "../components/Player/MusicList.vue";
+import ActionBar from "../components/Player/ActionBar.vue";
 
 const musicStore = useMusic();
-const audio = ref<HTMLAudioElement | null>(null);
-const img = ref<HTMLImageElement>();
-const progressBar = ref<HTMLDivElement>();
-const rect = ref<DOMRect>();
-
-onMounted(() => {
-    musicStore.currentMusic.audio = audio.value;
-    rect.value = progressBar.value?.getBoundingClientRect();
-
-    // Temporaire
-    if (audio.value) audio.value.volume = 0.10;
-});
-
-watch(() => musicStore.currentMusic.index, () => {
-    if (audio.value && img.value) {
-        audio.value.src = musicStore.currentMusic.metadata?.urlMusic || "";
-        img.value.src = musicStore.currentMusic.metadata?.thumbnail || "";
-    }
-})
-
-function mySetProgress(e: MouseEvent) {
-    if (rect.value) {  
-        const x = e.clientX - rect.value.left;
-        musicStore.setProgress(x);
-    }
-}
 </script>
 
 <template>
     <template v-if="(!musicStore.fetch.isLoading || musicStore.musics.length > 0) && musicStore.currentMusic.metadata">
         <div class="player">
-            <MusicHeader :metadata="musicStore.currentMusic.metadata" />
+            <MusicHeader/>
 
-            <MusicList :musics="musicStore.musics" @select-music="musicStore.selectMusic($event)" />
+            <MusicList />
+
+            <ActionBar />
         </div>
-
-        <button @click="musicStore.next">suivant</button>
     </template>
 
 
@@ -89,16 +63,10 @@ function mySetProgress(e: MouseEvent) {
     height: 100%;
     display: flex;
     flex-direction: column;
-    /* justify-content: space-between; */
+    justify-content: space-between;
 }
 
-p, span {
-    font-size: 1.5rem;
-    color: white;
-    cursor: pointer;
-}
-
-.progress-container {
+/* .progress-container {
     margin-block: 3rem;
     background-color: #727377;
     width: 200px;
@@ -115,5 +83,5 @@ p, span {
     transform-origin: left;
     transform: scaleX(0);
     background: linear-gradient(99deg, #4a8ea3, #6dd6ef 100%);
-}
+} */
 </style>

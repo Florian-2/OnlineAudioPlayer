@@ -22,6 +22,7 @@ export interface MusicState {
     currentMusic: { 
         audio: HTMLAudioElement | null;
         metadata: Music | null;
+        isPaused: boolean;
         currentTime: number,
         progress: number;
         index: number;

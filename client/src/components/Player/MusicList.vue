@@ -1,18 +1,12 @@
 <script lang="ts" setup>
-import type { Music } from '@/shared/interfaces';
+import { useMusic } from '@/stores/music';
 
-const emit = defineEmits<{
-    (e: "selectMusic", index: number): void
-}>();
-
-defineProps<{
-    musics: Music[];
-}>();
+const musicStore = useMusic();
 </script>
 
 <template>
     <div class="table-musics">
-        <div class="thead" role="rowgroup">
+        <div class="thead" role="rowheader">
             <span role="columnheader">#</span>
             <span role="columnheader">Titre</span>
             <span role="columnheader">Artiste</span>
@@ -21,10 +15,10 @@ defineProps<{
         </div>
 
         <div class="tbody" role="rowgroup">
-            <div class="row" role="row" v-for="(music, i) of musics" :key="music._id" @click="emit('selectMusic', i)">
-                <span class="flex-row" role="cell">{{ i }}</span>
+            <div :class="['row', { 'active': music._id === musicStore.currentMusic.metadata?._id } ]" role="row" v-for="(music, i) of musicStore.musics" :key="music._id" @click="musicStore.selectMusic(i)">
+                <span class="flex-row" role="cell">{{ i + 1 }}</span>
                 <span class="flex-row" role="cell">{{ music.title }}</span>
-                <span class="flex-row" role="cell">{{ music.artists?.join(" / ") }}</span>
+                <span class="flex-row" role="cell">{{ music.artists?.join("/") }}</span>
                 <span class="flex-row" role="cell">{{ music.album }}</span>
                 <span class="flex-row" role="cell">{{ music.formatDuration }}</span>
             </div>
@@ -34,46 +28,52 @@ defineProps<{
 
 <style lang="scss" scoped>
 .table-musics {
-    margin: 0 auto;
     width: 100%;
+    max-height: 380px;
     overflow-y: auto;
-
-    border: 1px solid transparent;
-    border-radius: 4px;
-    outline: 0;
+    padding-right: 0.5rem;
 
     .thead, .row {
         display: grid;
-        grid-template-columns: 30px 2fr 1fr 1fr 0.5fr;
-    }
-
-    span {
-        color: $first-color;
+        grid-template-columns: 30px 2fr 1fr 1fr 70px;
+        column-gap: 1rem;
     }
 
     .thead {
-        padding-inline: 16px;
-        background-color: rgba(255, 255, 255, 0.11);
+        position: sticky;
+        top: 0;
+        left: 0;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background-color: $first-color;
+        border-radius: $raduis;
 
         span {
+            color: $second-color;
             font-size: 1.6rem;
             font-weight: 500;
         }
     }
 
     .row {
-        padding: 1.6rem;
+        padding: 1rem;
         border-radius: $raduis;
         transition: background-color $transition-time;
         cursor: pointer;
 
         &:hover {
-            background-color: rgba(255, 255, 255, 0.086);
+            background-color: $hover-color;
         }
 
         span {
             font-size: 1.4rem;
+            color: $first-color;
+            @include Ellipsis(nowrap);
         }
     }
+}
+
+.active {
+    background-color: $hover-color;
 }
 </style>

@@ -4,6 +4,7 @@ $first-color-light: darken($color: $first-color, $amount: 20%);
 $second-color: #252741;
 $danger-color: #f8494f;
 $shadow: 2px 2px 20px 5px rgba(255, 255, 255, 0.1);
+$hover-color: rgba(255, 255, 255, 0.085);
 
 // ----- Typography ----- //
 $body-font: 'Poppins', sans-serif;

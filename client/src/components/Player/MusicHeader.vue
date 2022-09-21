@@ -1,20 +1,19 @@
 <script lang="ts" setup>
-import type { Music } from '@/shared/interfaces';
+import { useMusic } from '@/stores/music';
 
-defineProps<{
-    metadata: Music;
-}>();
+const musicStore = useMusic();
 </script>
 
 <template>
     <div class="info-current-music">
         <div class="box-img">
-            <img ref="img" :src="metadata.thumbnail">
+            <img ref="img" :src="musicStore.currentMusic.metadata?.thumbnail">
         </div>
 
         <div class="infos">
-            <h1>{{ metadata.title }}</h1>
-            <p v-if="metadata.artists?.length">{{ metadata.artists.join(" / ") }}</p>
+            <h1>{{ musicStore.currentMusic.metadata?.title }}</h1>
+            <p v-if="musicStore.currentMusic.metadata?.artists?.length">{{ musicStore.currentMusic.metadata?.artists.join(" / ") }}</p>
+            <p v-if="musicStore.currentMusic.metadata?.genre?.length">{{ musicStore.currentMusic.metadata?.genre.join(" / ") }}</p>
         </div>
     </div>
 </template>
