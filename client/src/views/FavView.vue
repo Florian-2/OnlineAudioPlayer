@@ -6,21 +6,21 @@ import ActionBar from "@/components/Player/ActionBar.vue";
 
 const musicStore = useMusic();
 </script>
-
+    
 <template>
     <template v-if="(!musicStore.fetch.isLoading || musicStore.musics.length > 0)">
         <div class="player">
-            <MusicHeader/>
+            <MusicHeader />
 
-            <MusicList/>
+            <MusicList :musics="musicStore.favoriteMusics" />
 
-            <ActionBar/>
+            <ActionBar />
         </div>
     </template>
 
     <p v-else>Chargement...</p>
 </template>
-
+    
 <style scoped>
 .player {
     height: 100%;

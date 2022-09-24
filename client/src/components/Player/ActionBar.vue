@@ -10,12 +10,15 @@ import IconVolumeHigh from '../icons/IconVolumeHigh.vue';
 import IconVolumeMedium from '../icons/IconVolumeMedium.vue';
 import IconVolumeMute from '../icons/IconVolumeMute.vue';
 import IconVolumeLow from '../icons/IconVolumeLow.vue';
+import InputRange from '../InputRange.vue';
 
 
 const musicStore = useMusic();
 const audio = ref<HTMLAudioElement | null>(null);
 const inputRangeProgressBar = ref(0);
-const inputVolume = ref(20);
+const baseVolume = 10;
+const inputVolume = ref(baseVolume);
+let preferenceVolume: number;
 
 onMounted(() => {
     if (audio.value) {
@@ -26,7 +29,12 @@ onMounted(() => {
 
 watchEffect(() => inputRangeProgressBar.value = musicStore.currentMusic.progress);
 
-function inputRange(e: Event) {
+function activeShufflePlaying() {
+    musicStore.shufflePlay = true;
+    musicStore.playAShuffledSong();
+}
+
+function inputRange(e: Event) {   
     const input = e.target as HTMLInputElement;    
     musicStore.setProgress(Number(input.value));
 }
@@ -38,14 +46,15 @@ function setVolume(e: Event) {
         const volume = Number(input.value);
         audio.value.volume = volume / 100;
         inputVolume.value = volume;
+        preferenceVolume = volume / 100;
     }
 }
 
 function muteOrDemute() {
     if (audio.value) {
-        if (inputVolume.value === 0) {            
-            audio.value.volume = 0.2;
-            inputVolume.value = 20;
+        if (inputVolume.value === 0) {
+            audio.value.volume = preferenceVolume || (baseVolume / 100);
+            inputVolume.value = preferenceVolume * 100 || baseVolume;
             return;
         }
 
@@ -62,7 +71,6 @@ function muteOrDemute() {
         @loadedmetadata="musicStore.setDuration"
         @timeupdate="musicStore.setCurrentTime"
         @ended="musicStore.handleChangeSong('next')" 
-        controls
         hidden
     >
     </audio>
@@ -87,8 +95,8 @@ function muteOrDemute() {
                 </button>
             </div>
 
-            <div class="btns volume">
-                <button title="Aléatoire" @click="musicStore.shuffleMusic">
+            <div class="btns otherActions">
+                <button title="Aléatoire" @click="activeShufflePlaying">
                     <IconShuffle/>
                 </button>
 
@@ -99,19 +107,27 @@ function muteOrDemute() {
                     <IconVolumeHigh v-else/>
                 </button>
 
-                <input type="range" min="0" max="100" step="0.5" :value="inputVolume" @input="setVolume">
+                <InputRange 
+                    input-min="0" 
+                    input-max="100"
+                    input-step="0.5"
+                    v-model="inputVolume"
+                    @input="setVolume"
+                    class="inputVolume"
+                />
             </div>
         </div>
             
-        <div class="progress-container">
-            <input 
-                type="range" 
-                min="0" :max="musicStore.currentMusic.metadata?.duration" step="0.1"
-                v-model="inputRangeProgressBar" 
-                @input="inputRange" 
+        <div class="progress-container">           
+            <InputRange 
+                input-min="0" 
+                :input-max="musicStore.currentMusic.metadata?.duration!"
+                input-step="0.1"
+                v-model="inputRangeProgressBar"
+                @input="inputRange"
                 class="progress-bar" 
             />
-            
+
             <div class="time">
                 <span class="time-indicator">{{ musicStore.currentTime }}</span>
                 <span class="time-indicator">{{ musicStore.currentMusic.metadata?.formatDuration }}</span>
@@ -126,20 +142,12 @@ function muteOrDemute() {
     border-radius: 5px;
     padding: 1rem;
 
-    input[type=range] {
-        height: 5px;
-        cursor: pointer;
-    }
-
     .actions {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        align-items: center;
-        
-        .title {
-            font-size: 1.15rem;
-            color: $first-color;
-            @include Ellipsis(nowrap);
+
+        @media screen and (max-width: 1000px) {
+            grid-template-columns: 1fr 1fr;
         }
         
         .btns {
@@ -149,11 +157,29 @@ function muteOrDemute() {
 
         .playPause {
             grid-column: 2 / 3;
+
+            @media screen and (max-width: 1000px) {
+                grid-column: 1 / 2;
+            }
         }
 
-        .volume {
+        .otherActions {
             grid-column: 3 / 4;
             justify-self: flex-end;
+
+            @media screen and (max-width: 1000px) {
+                grid-column: 2 / 3;
+                justify-self: center;
+
+                .inputVolume {
+                    width: 100px;
+                }
+            }
+
+            .inputVolume::-webkit-slider-thumb {
+                height: 10px;
+                width: 15px;
+            }
         }
     }
 

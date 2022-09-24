@@ -19,10 +19,6 @@ svg {
     stroke: $first-color;
     stroke-linejoin: round;
     stroke-linecap: round;
-<<<<<<< HEAD
     stroke-width: 30px;
-=======
-    stroke-width: 20px;
->>>>>>> 4e4a948073416f59e42bf025256cd69f65454b6b
 }
 </style>

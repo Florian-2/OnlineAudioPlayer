@@ -1,5 +1,6 @@
 export interface Music {
     _id: string;
+    fav: boolean;
     title: string;
     album?: string;
     albumartist?: string;
@@ -13,12 +14,15 @@ export interface Music {
     size: number;
     thumbnail: string;
     urlMusic: string;
-    user_id: string;
-    __v: number;
+    // user_id: string;
+    // __v: number;
 }
 
 export interface MusicState {
     musics: Music[];
+    copyMusics: Music[]; // Readonly
+    shufflePlay: boolean;
+    randomOrderPlayingMusic: number[];
     currentMusic: { 
         audio: HTMLAudioElement | null;
         metadata: Music | null;
@@ -33,3 +37,7 @@ export interface MusicState {
         needRefresh: boolean;
     };
 }
+
+export type MutableMusic<T> = {
+    -readonly[P in keyof T]: T[P]
+};

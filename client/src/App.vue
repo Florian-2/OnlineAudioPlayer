@@ -30,7 +30,7 @@ window.addEventListener("dragover", (e) => e.preventDefault());
     </div>
 </template>
 
-<style>
+<style lang="scss">
 .grid-layout {
     height: 100%;
     display: grid;

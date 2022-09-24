@@ -1,12 +1,15 @@
 import { defineStore } from "pinia";
 import { addMusic, fetchMusics } from "@/services/music.services";
-import { formatTime } from "@/utils/features";
+import { formatTime, generateRandomNumberArr } from "@/utils/features";
 import type { MusicState } from "@/shared/interfaces/music.interface";
 
 
 export const useMusic = defineStore("music", {
 	state: (): MusicState => ({
 		musics: [],
+		copyMusics: [],
+		shufflePlay: false,
+		randomOrderPlayingMusic: [],
 		currentMusic: {
 			audio: null,
 			metadata: null,
@@ -31,6 +34,7 @@ export const useMusic = defineStore("music", {
 			try {				
 				const musics = await addMusic(files);
 				this.musics = musics;
+				this.copyMusics = musics;
 				this.currentMusic.metadata = musics[0];
 				this.fetch.needRefresh = true;
 			} 
@@ -41,8 +45,9 @@ export const useMusic = defineStore("music", {
 		async fetchMusics() {
 			try {
 				this.fetch.isLoading = true;
-				const musics = await fetchMusics();
+				const musics = await fetchMusics();		
 				this.musics = musics;
+				this.copyMusics = musics;
 				this.currentMusic.metadata = musics[0];
 			} 
 			catch (error) {
@@ -53,6 +58,24 @@ export const useMusic = defineStore("music", {
 			}
 		},
 		handleChangeSong(action: string) {
+
+			if (this.shufflePlay === true) {
+				const currentIndex = this.randomOrderPlayingMusic.indexOf(this.currentMusic.index);
+
+				const nextIndex = this.randomOrderPlayingMusic[currentIndex + 1];
+
+				if (typeof nextIndex === "undefined") {					
+					this.currentMusic.index = 0;
+					this.shufflePlay = false;
+					console.warn("Liste terminée, retour à la première musique de la liste");
+				}
+				else {
+					this.currentMusic.index = nextIndex;
+				}
+
+				return this.play();
+			}
+
 			action === "next" ? this.currentMusic.index++ : this.currentMusic.index--;
 
 			if (this.currentMusic.index < 0) {
@@ -65,18 +88,14 @@ export const useMusic = defineStore("music", {
 			this.play();
 		},
 		selectMusic(indexSong: number) {	
-			if (indexSong !== this.currentMusic.index) {
-				this.currentMusic.index = indexSong;
-				this.play();
-			}
+			this.currentMusic.index = indexSong;
+			this.shufflePlay = false; // Interruption de la lecture aléatoire
+			this.play();
 		},
-		shuffleMusic() {
-			for (let i = this.musics.length - 1; i > 0; i--) {
-				const nb = Math.floor(Math.random() * (i + 1));
-				[this.musics[i], this.musics[nb]] = [this.musics[nb], this.musics[i]];
-			}
-
-			this.currentMusic.metadata = this.musics[0];
+		playAShuffledSong() {
+			this.randomOrderPlayingMusic = generateRandomNumberArr(this.musics.length);
+			this.currentMusic.index = this.randomOrderPlayingMusic[0];
+			this.play();
 		},
 		handlePlayPause() {
 			if (this.currentMusic.audio?.paused) this.play();

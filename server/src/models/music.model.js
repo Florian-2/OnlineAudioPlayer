@@ -3,6 +3,11 @@ import mongoose from "mongoose";
 const musicSchema = mongoose.Schema({
     musics: [
         {
+            fav: {
+                type: Boolean,
+                require: false,
+                default: false
+            },
             title: {
                 type: String,
                 require: false,

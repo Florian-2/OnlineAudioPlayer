@@ -22,9 +22,8 @@ const emit = defineEmits<{
             <h1>O-Music</h1>
 
             <nav>
-                <router-link to="/audio-player">Accueil</router-link>
+                <router-link to="/audio-player">Lecteur</router-link>
                 <router-link to="/profil">Profil</router-link>
-                <router-link to="/favorite">Favoris</router-link>
 
                 <div class="dropdown">
                     <button @click="toggleDropdown">

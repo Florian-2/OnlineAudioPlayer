@@ -19,7 +19,7 @@ export async function addMusic(files: Set<File>): Promise<Music[]> {
 
 export async function fetchMusics(): Promise<Music[]> {
     try {
-        const musics = await axios.get("/api/music/getAll");        
+        const musics = await axios.get("/api/music/getAll");
         return musics.data.musics;
     } 
     catch (error) {
