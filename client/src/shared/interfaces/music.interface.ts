@@ -37,7 +37,3 @@ export interface MusicState {
         needRefresh: boolean;
     };
 }
-
-export type MutableMusic<T> = {
-    -readonly[P in keyof T]: T[P]
-};

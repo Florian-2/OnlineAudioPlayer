@@ -44,7 +44,7 @@ export async function fetchCurrentUser(): Promise<User> {
         return res.data;
     }
     catch (error) {
-        console.log("catch");
+        console.log("catch", error);
 
         if (error instanceof AxiosError) {
             if(error.response?.data?.reason === "token expired") {

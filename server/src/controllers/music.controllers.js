@@ -26,3 +26,16 @@ export const getAllMusics = async (req, res) => {
         res.status(500).json({ message: "Vous n'avez pas encore importé vos musiques." });
     }
 }
+
+export const likeOrDislike = async (req, res) => {
+    try {
+        const musidId = req.params.id;
+        const newValue = req.body.fav;
+        const response = await Music.likeOrDislike(musidId, newValue);
+        res.json({ result: response });
+    } 
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error });
+    }
+}

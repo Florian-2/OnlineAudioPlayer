@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import Button from "../Button.vue";
-const props = defineProps<{
+defineProps<{
     type: "text" | "email";
     label: string | undefined;
     name: string;
@@ -8,7 +7,6 @@ const props = defineProps<{
     icon: "user" | "email"
     error: any;
     handleChange: (payload: Event) => void,
-    // handleBlur: (payload: FocusEvent) => void,
     meta: { touched: boolean, valid: boolean, validated: boolean }
 }>()
 
@@ -38,9 +36,3 @@ const updateValue = (e: Event) => {
         <small v-if="error">{{ error }}</small>
     </div>
 </template>
-
-<style lang="scss" scoped>
-.error {
-    border: 2px solid red;
-}
-</style>

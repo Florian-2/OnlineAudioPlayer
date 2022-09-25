@@ -52,3 +52,19 @@ export const getAllMusics = async (userID) => {
         throw error;
     }
 }
+
+export const likeOrDislike = async (musicID, newValue) => {
+    try {
+        const res = await Music.updateOne({ "musics._id": musicID }, { $set: { "musics.$.fav": newValue } });
+
+        if (!res.acknowledged) {
+            throw new Error("Musique introuvable");
+        }
+        else {
+            return true;
+        }
+    } 
+    catch (error) {
+        throw error;
+    }
+} 

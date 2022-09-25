@@ -16,8 +16,6 @@ defineProps<{
 <style lang="scss" scoped>
 svg {
     cursor: pointer;
-    min-width: 22px;
-    width: 22px;
     fill: none;
     stroke: $first-color;
     stroke-miterlimit: 10;

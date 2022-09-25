@@ -72,7 +72,7 @@ const isSubmitting = form.isSubmitting;
                 :handleChange="passwordHandleChange"
             />
 
-            <p v-if="errorLogin">{{ errorLogin }}</p>
+            <p v-if="errorLogin" class="error">{{ errorLogin }}</p>
 
             <div class="btn-action">
                 <Button btnType="primary" type="submit" @click="onSubmit" :disabled="isSubmitting">Connexion</Button>
@@ -86,3 +86,12 @@ const isSubmitting = form.isSubmitting;
         </p>
     </div>
 </template>
+
+<style lang="scss" scoped>
+.error {
+    margin-block: 0.5rem;
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    color: $danger-color;
+    text-align: center;
+}
+</style>

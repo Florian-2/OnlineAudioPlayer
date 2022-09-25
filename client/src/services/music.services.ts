@@ -43,3 +43,14 @@ export async function initialFetchMusics(): Promise<void> {
         musicStore.fetch.needRefresh = false;
     }
 }
+
+export async function favorites(musicId: string, value: boolean): Promise<boolean> {
+    try {
+        const res = await axios.put(`/api/music/add-to-favorite/${musicId}`, { fav: value });
+        return res.data.result;
+    } 
+    catch (error) {
+        console.log(error);
+        throw error;
+    }
+}

@@ -13,7 +13,7 @@ defineProps<{
 <style lang="scss" scoped>
 svg {
     cursor: pointer;
-    width: 35px;
+    // width: 35px;
     fill: none;
     stroke: $first-color;
     stroke-linejoin: round;

@@ -30,7 +30,6 @@ onMounted(() => {
 watchEffect(() => inputRangeProgressBar.value = musicStore.currentMusic.progress);
 
 function activeShufflePlaying() {
-    musicStore.shufflePlay = true;
     musicStore.playAShuffledSong();
 }
 
@@ -77,17 +76,17 @@ function muteOrDemute() {
 
     <div class="container-action">
         <div class="actions">
-            <div class="btns playPause">
+            <div class="box-btns playPause">
                 <button title="Musique précédente" @click="musicStore.previous">
                     <IconPrevious/>
                 </button>
 
-                <button v-if="musicStore.currentMusic.isPaused" title="Jouer" @click="musicStore.play">
-                    <IconPlay/>
+                <button v-if="musicStore.currentMusic.isPaused" title="Jouer" @click="musicStore.play" class="play-pause">
+                    <IconPlay class="svg-play" />
                 </button>
 
-                <button v-else title="Pause" @click="musicStore.pause">
-                    <IconPause/>
+                <button v-else title="Pause" @click="musicStore.pause" class="play-pause">
+                    <IconPause class="svg-pause" />
                 </button>
 
                 <button title="Musique suivante" @click="musicStore.next">
@@ -95,7 +94,7 @@ function muteOrDemute() {
                 </button>
             </div>
 
-            <div class="btns otherActions">
+            <div class="box-btns otherActions">
                 <button title="Aléatoire" @click="activeShufflePlaying">
                     <IconShuffle/>
                 </button>
@@ -150,7 +149,7 @@ function muteOrDemute() {
             grid-template-columns: 1fr 1fr;
         }
         
-        .btns {
+        .box-btns {
             @include Flex(center);
             gap: 0.5rem;
         }
@@ -203,10 +202,26 @@ function muteOrDemute() {
 }
 
 button {
-    cursor: pointer;
+    padding: 0.7rem;
+    @include Flex(center);
     background-color: transparent;
     border: none;
-    padding: 0.5rem;
-    height: 100%;
+    border-radius: 50%;
+    transition: background-color $transition-time;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $hover-color;
+    }
+
+    svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .svg-play, .svg-pause {
+        width: 35px;
+        height: 35px;
+    }
 }
 </style>

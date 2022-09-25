@@ -53,10 +53,6 @@ const handleShowPassword = (): boolean => showPassword.value = !showPassword.val
 </template>
 
 <style lang="scss" scoped>
-.error {
-    border: 2px solid red;
-}
-
 .input {
     position: relative;
 }

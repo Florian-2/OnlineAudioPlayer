@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { addMusic, fetchMusics } from "@/services/music.services";
+import { addMusic, favorites, fetchMusics } from "@/services/music.services";
 import { formatTime, generateRandomNumberArr } from "@/utils/features";
 import type { MusicState } from "@/shared/interfaces/music.interface";
 
@@ -57,8 +57,30 @@ export const useMusic = defineStore("music", {
 				this.fetch.isLoading = false;
 			}
 		},
+		async favorite(musicId: string) {
+			const indexMusic = this.musics.findIndex((music) => music._id === musicId);
+			const music = this.musics[indexMusic];
+
+			try {
+				if (indexMusic !== -1) {
+					if (!music.fav) { // like 
+						music.fav = true
+						return await favorites(musicId, true);
+					} 
+					// dislike
+					music.fav = false;
+					this.musics = this.musics.filter((music) => music.fav === true);
+
+					return await favorites(musicId, false);
+				}
+			} 
+			catch (error) {
+				throw error;
+			}
+		},
 		handleChangeSong(action: string) {
 
+			// Gérer la lecture aléatoire
 			if (this.shufflePlay === true) {
 				const currentIndex = this.randomOrderPlayingMusic.indexOf(this.currentMusic.index);
 
@@ -76,6 +98,7 @@ export const useMusic = defineStore("music", {
 				return this.play();
 			}
 
+			// Lecture simple
 			action === "next" ? this.currentMusic.index++ : this.currentMusic.index--;
 
 			if (this.currentMusic.index < 0) {
@@ -87,13 +110,15 @@ export const useMusic = defineStore("music", {
 
 			this.play();
 		},
-		selectMusic(indexSong: number) {	
-			this.currentMusic.index = indexSong;
+		selectMusic(id: string) {	
+			const indexMusic = this.musics.findIndex((music) => music._id === id) || 0;
+			this.currentMusic.index = indexMusic;
 			this.shufflePlay = false; // Interruption de la lecture aléatoire
 			this.play();
 		},
 		playAShuffledSong() {
 			this.randomOrderPlayingMusic = generateRandomNumberArr(this.musics.length);
+			this.shufflePlay = true;
 			this.currentMusic.index = this.randomOrderPlayingMusic[0];
 			this.play();
 		},

@@ -13,7 +13,6 @@ defineProps<{
     
 <style lang="scss" scoped>
 svg {
-    width: 35px;
     fill: none;
     stroke: $first-color;
     stroke-width: 30px;
