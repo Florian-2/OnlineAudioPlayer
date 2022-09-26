@@ -39,3 +39,15 @@ export const likeOrDislike = async (req, res) => {
         res.status(500).json({ message: error });
     }
 }
+
+export const deleteMusic = async (req, res) => {
+    try {
+        const musidId = req.params.id;
+        const response = await Music.deleteMusic(req.user._id, musidId);
+        res.json({ result: response });
+    } 
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error });
+    }
+}

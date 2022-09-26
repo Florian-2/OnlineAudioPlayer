@@ -54,3 +54,16 @@ export async function favorites(musicId: string, value: boolean): Promise<boolea
         throw error;
     }
 }
+
+export async function deleteMusic(musicId: string) {
+    try {
+        const res = await axios.delete(`/api/music/delete/${musicId}`);
+        console.log(res.data);
+        
+        return res.data.result;
+    } 
+    catch (error) {
+        console.log(error);
+        throw error;
+    }
+}

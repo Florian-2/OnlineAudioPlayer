@@ -1,13 +1,12 @@
 <script lang="ts" setup>
 import { useMusic } from '@/stores/music';
-import { ref, watch } from 'vue';
+import { watch } from 'vue';
 import IconHeart from '../icons/IconHeart.vue';
 
 const musicStore = useMusic();
-const favMusicOnly = ref(false);
 
-watch(favMusicOnly, () => {
-    if (favMusicOnly.value) {
+watch(() => musicStore.favOnly, () => {
+    if (musicStore.favOnly) {
         musicStore.musics = musicStore.musics.filter((music) => music.fav === true);
     }
     else {
@@ -20,7 +19,13 @@ watch(favMusicOnly, () => {
     <div class="table-musics">
         <div class="thead" role="rowheader">
             <span role="columnheader">#</span>
-            <span role="columnheader">Titre <input type="checkbox" v-model="favMusicOnly">Favoris</span>
+            <span role="columnheader">
+                Titre 
+                <div class="favOnly">
+                    (<input type="checkbox" v-model="musicStore.favOnly" name="favOnly" id="favOnly">
+                    <label for="favOnly" id="favOnly">Seulement les favoris</label>)
+                </div>
+            </span>
             <span role="columnheader">Artiste</span>
             <span role="columnheader">Album</span>
             <span role="columnheader">Durée</span>
@@ -45,23 +50,15 @@ watch(favMusicOnly, () => {
                     </button>
                 </div>
 
-                <div @click="musicStore.selectMusic(music._id)">
-                    <p class="title">
-                        <span>{{ music.title }}</span>
-                    </p>
-                </div>
+                <span>
+                    <span class="title" @click="musicStore.selectMusic(music._id)">{{ music.title }}</span>
+                </span>
+                          
+                <span>{{ music.artists?.join("/") }}</span>
 
-                <div role="cell">
-                    <span>{{ music.artists?.join("/") }}</span>
-                </div>
+                <span>{{ music.album }}</span>
 
-                <div role="cell">
-                    <span>{{ music.album }}</span>
-                </div>
-
-                <div role="cell">
-                    <span>{{ music.formatDuration }}</span>
-                </div>
+                <span>{{ music.formatDuration }}</span>
             </div>
         </div>
     </div>
@@ -70,48 +67,22 @@ watch(favMusicOnly, () => {
 <style lang="scss" scoped>
 .table-musics {
     width: 100%;
-    max-height: 380px;
+    height: 380px;
     overflow-y: auto;
     padding-right: 0.5rem;
 
     .thead, .row {
         display: grid;
-        grid-template-columns: 30px 2fr 1fr 1fr 70px;
+        grid-template-columns: minmax(30px, auto) 2fr 1fr 1fr 70px;
         align-items: center;
         column-gap: 1rem;
 
         @media screen and (max-width: 900px) {
-            grid-template-columns: 30px 2fr 1fr 70px;
+            grid-template-columns: auto 2fr 1fr 70px;
             
             // Colonne Album
-            div:nth-child(4), 
             span:nth-child(4) { 
                 display: none;
-            }
-        }
-    
-        .title {
-            display: inline-block;
-            position: relative;
-            cursor: pointer;
-
-            span::before {
-                position: absolute;
-                content: "";
-                bottom: 0;
-                left: 0;
-                height: 2px;
-                width: 100%;
-                border-radius: $raduis;
-                background-color: $first-color;
-                opacity: 0;
-                visibility: hidden;
-                transition: all $transition-time;
-            }
-
-            span:hover::before {
-                opacity: 1;
-                visibility: visible;
             }
         }
 
@@ -151,6 +122,23 @@ watch(favMusicOnly, () => {
             color: $second-color;
             font-size: 1.5rem;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            .favOnly {
+                display: inline-flex;
+                align-items: center;
+
+                input, label {
+                    cursor: pointer;
+                }
+                
+                label {
+                    font-size: 1.2rem;
+                    margin-left: 5px;
+                }
+            }
         }
     }
 
@@ -169,7 +157,7 @@ watch(favMusicOnly, () => {
 
                 button.like {
                     opacity: 1;
-                    visibility: visible
+                    visibility: visible;
                 }
             }
 
@@ -177,6 +165,14 @@ watch(favMusicOnly, () => {
                 font-size: 1.35rem;
                 color: $first-color;
                 @include Ellipsis(nowrap);
+            }
+
+            .title {
+                cursor: pointer;
+
+                &:hover {
+                    text-decoration: underline;
+                }
             }
         }
         

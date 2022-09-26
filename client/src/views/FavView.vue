@@ -12,7 +12,7 @@ const musicStore = useMusic();
         <div class="player">
             <MusicHeader />
 
-            <MusicList :musics="musicStore.favoriteMusics" />
+            <MusicList />
 
             <ActionBar />
         </div>

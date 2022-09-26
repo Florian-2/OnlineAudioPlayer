@@ -14,13 +14,14 @@ export interface Music {
     size: number;
     thumbnail: string;
     urlMusic: string;
-    // user_id: string;
-    // __v: number;
+    user_id: string;
+    __v: number;
 }
 
 export interface MusicState {
     musics: Music[];
     copyMusics: Music[]; // Readonly
+    favOnly: boolean;
     shufflePlay: boolean;
     randomOrderPlayingMusic: number[];
     currentMusic: { 

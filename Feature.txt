@@ -1,0 +1,8 @@
+- Gérer mes musiques:
+    1. Supprimer une musique
+    2. Modifier les metadata de la musique (artiste, titre, album, img...), essayer de faire en sorte que les champs soient préremplis
+
+- Profil:
+    1. Modifier les informations de l'utilisateur (pseudo, email)
+    2. Possibilité de supprimer son compte
+

@@ -58,7 +58,23 @@ export const likeOrDislike = async (musicID, newValue) => {
         const res = await Music.updateOne({ "musics._id": musicID }, { $set: { "musics.$.fav": newValue } });
 
         if (!res.acknowledged) {
-            throw new Error("Musique introuvable");
+            throw new Error("Une erreur est survenue lors de la modification de la musique");
+        }
+        else {
+            return true;
+        }
+    } 
+    catch (error) {
+        throw error;
+    }
+} 
+
+export const deleteMusic = async (userID, musicID) => {
+    try {
+        const res = await Music.updateOne({ "user_id": userID }, { $pull: { musics: { _id: musicID } }}, { upsert: false, multi: true });
+        
+        if (!res.acknowledged) {
+            throw new Error("Une erreur est survenue lors de la suppression de la musique");
         }
         else {
             return true;

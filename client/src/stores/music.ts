@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { addMusic, favorites, fetchMusics } from "@/services/music.services";
+import { addMusic, deleteMusic, favorites, fetchMusics } from "@/services/music.services";
 import { formatTime, generateRandomNumberArr } from "@/utils/features";
 import type { MusicState } from "@/shared/interfaces/music.interface";
 
@@ -8,6 +8,7 @@ export const useMusic = defineStore("music", {
 	state: (): MusicState => ({
 		musics: [],
 		copyMusics: [],
+		favOnly: false,
 		shufflePlay: false,
 		randomOrderPlayingMusic: [],
 		currentMusic: {
@@ -45,7 +46,7 @@ export const useMusic = defineStore("music", {
 		async fetchMusics() {
 			try {
 				this.fetch.isLoading = true;
-				const musics = await fetchMusics();		
+				const musics = await fetchMusics();
 				this.musics = musics;
 				this.copyMusics = musics;
 				this.currentMusic.metadata = musics[0];
@@ -73,6 +74,16 @@ export const useMusic = defineStore("music", {
 
 					return await favorites(musicId, false);
 				}
+			} 
+			catch (error) {
+				throw error;
+			}
+		},
+		async deleteMusic(musicId: string) {
+			try {
+				const indexMusic = this.musics.findIndex((music) => music._id === musicId);
+				this.musics.splice(indexMusic, 1);
+				await deleteMusic(musicId);
 			} 
 			catch (error) {
 				throw error;
@@ -113,7 +124,11 @@ export const useMusic = defineStore("music", {
 		selectMusic(id: string) {	
 			const indexMusic = this.musics.findIndex((music) => music._id === id) || 0;
 			this.currentMusic.index = indexMusic;
-			this.shufflePlay = false; // Interruption de la lecture aléatoire
+
+			if (this.shufflePlay) {
+				this.shufflePlay = false; // Interruption de la lecture aléatoire
+				console.warn("Lecture aléatoire interrompue");
+			}
 			this.play();
 		},
 		playAShuffledSong() {

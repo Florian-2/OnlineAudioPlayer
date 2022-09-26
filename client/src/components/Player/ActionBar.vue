@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useMusic } from '@/stores/music';
-import { onMounted, ref, watchEffect } from 'vue';
+import { onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import IconShuffle from '../icons/IconShuffle.vue';
 import IconPrevious from '../icons/IconPrevious.vue';
 import IconPlay from '../icons/IconPlay.vue';
@@ -24,8 +24,11 @@ onMounted(() => {
     if (audio.value) {
         musicStore.currentMusic.audio = audio.value;
         audio.value.volume = inputVolume.value / 100;
+        musicStore.currentMusic.audio.currentTime = inputRangeProgressBar.value || 0;
     }
 });
+
+onUnmounted(() => musicStore.pause());
 
 watchEffect(() => inputRangeProgressBar.value = musicStore.currentMusic.progress);
 
