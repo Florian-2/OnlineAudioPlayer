@@ -14,8 +14,8 @@ export interface Music {
     size: number;
     thumbnail: string;
     urlMusic: string;
-    user_id: string;
-    __v: number;
+    // user_id: string;
+    // __v: number;
 }
 
 export interface MusicState {
@@ -37,4 +37,10 @@ export interface MusicState {
         loaded: boolean;
         needRefresh: boolean;
     };
+}
+
+export interface EditMusic {
+    title: string;
+    artists: string;
+    album?: string;
 }

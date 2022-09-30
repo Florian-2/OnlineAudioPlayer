@@ -1,24 +1,32 @@
 <script lang="ts" setup>
 import { useMusic } from '@/stores/music';
+import { useRouter } from 'vue-router';
 import Button from '../components/Button.vue';
 
 
 const musicStore = useMusic();
+const router = useRouter();
+
+function toEdit(musicId: string) {
+    router.push({ name: "Edit", params: { id: musicId } });
+}
 </script>
 
 <template>
-    <div class="container-musics">
+    <div class="container-musics" v-if="musicStore.musics.length > 0">
         <div 
             v-for="music in musicStore.musics" :key="music._id" 
             class="music"
         >
             <span>{{ music.title }}</span>
-            <span>{{ music.artist?.join("/") }}</span>
+            <span>{{ music.artists?.join("/") }}</span>
             <span>{{ music.album }}</span>
-            <Button btnType="primary">éditer</Button>
+            <Button btnType="primary" @click="toEdit(music._id)">éditer</Button>
             <Button btnType="danger" @click="musicStore.deleteMusic(music._id)">supprimer</Button>
         </div>
     </div>
+
+    <p v-else>Vous n'avez pas de musique</p>
 </template>
 
 <style lang="scss" scoped>

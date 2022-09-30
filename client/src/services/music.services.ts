@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Music } from "@/shared/interfaces/music.interface";
+import type { EditMusic, Music } from "@/shared/interfaces/music.interface";
 import { useMusic } from "@/stores/music";
 
 
@@ -41,6 +41,26 @@ export async function initialFetchMusics(): Promise<void> {
     }
     finally {
         musicStore.fetch.needRefresh = false;
+    }
+}
+
+export async function fetchOneMusic(musicId: string): Promise<Music> {
+    try {
+        const musics = await axios.get(`/api/music/${musicId}`);
+        return musics.data;
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
+export async function editMusic(musicId: string, formData: EditMusic): Promise<Music> {
+    try {
+        const musics = await axios.put(`/api/music/edit/${musicId}`, formData);
+        return musics.data.musics[0];
+    } 
+    catch (error) {
+        throw error;
     }
 }
 

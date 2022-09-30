@@ -9,7 +9,7 @@ const listOfGenres = computed(() => musicStore.currentMusic.metadata?.genre?.joi
 </script>
 
 <template>
-    <div class="info-current-music">
+    <div class="info-current-music" v-if="musicStore.musics.length > 0">
         <div class="box-img">
             <img ref="img" :src="musicStore.currentMusic.metadata?.thumbnail">
         </div>

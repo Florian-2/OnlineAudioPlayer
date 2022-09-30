@@ -27,6 +27,30 @@ export const getAllMusics = async (req, res) => {
     }
 }
 
+export const getOneMusic = async (req, res) => {
+    try {
+        const music = await Music.getOneMusic(req.user._id, req.params.id);
+        res.json(music.musics[0]);
+    } 
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export const editOneMusic = async (req, res) => {
+    try {
+        const musicID = req.params.id;
+        await Music.editOneMusic(musicID, req.body);
+        const music = await Music.getOneMusic(req.user._id, musicID);
+        res.json(music);
+    } 
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+}
+
 export const likeOrDislike = async (req, res) => {
     try {
         const musidId = req.params.id;

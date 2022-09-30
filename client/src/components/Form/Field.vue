@@ -4,7 +4,6 @@ defineProps<{
     label: string | undefined;
     name: string;
     modelValue: string;
-    icon: "user" | "email"
     error: any;
     handleChange: (payload: Event) => void,
     meta: { touched: boolean, valid: boolean, validated: boolean }

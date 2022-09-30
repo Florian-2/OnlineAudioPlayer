@@ -25,12 +25,23 @@ window.addEventListener("dragover", (e) => e.preventDefault());
         <TheHeader v-if="userStore.isAuthenticated" :isAuthenticated="userStore.isAuthenticated" @logout="logout" />
 
         <main>
-            <RouterView />
+            <Suspense>
+                <RouterView />
+                
+                <template #fallback>
+                    <h1>Chargement...</h1>
+                </template>
+            </Suspense>
         </main>
     </div>
 </template>
 
 <style lang="scss">
+h1 {
+    font-size: 2rem;
+    color: white;
+}
+
 .grid-layout {
     height: 100%;
     display: grid;

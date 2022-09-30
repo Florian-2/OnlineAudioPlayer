@@ -8,17 +8,13 @@ const musicStore = useMusic();
 </script>
 
 <template>
-    <template v-if="!musicStore.fetch.isLoading && musicStore.musics.length > 0">
-        <div class="player">
-            <MusicHeader/>
+    <div class="player" v-if="!musicStore.fetch.isLoading">
+        <MusicHeader/>
 
-            <MusicList/>
+        <MusicList/>
 
-            <ActionBar/>
-        </div>
-    </template>
-
-    <p v-else-if="musicStore.musics.length <= 0 && musicStore.fetch.loaded">Vous n'avez pas de musique</p>
+        <ActionBar/>
+    </div>
 
     <p v-else>Chargement...</p>
 </template>

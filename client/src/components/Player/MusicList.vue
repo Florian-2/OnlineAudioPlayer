@@ -61,6 +61,9 @@ watch(() => musicStore.favOnly, () => {
                 <span>{{ music.formatDuration }}</span>
             </div>
         </div>
+
+        <p v-if="musicStore.musics.length === 0 && !musicStore.favOnly">Vous n'avez pas de musique</p>
+        <p v-if="musicStore.musics.length === 0 && musicStore.favOnly">Vous n'avez pas de musique favorite</p>
     </div>
 </template>
 

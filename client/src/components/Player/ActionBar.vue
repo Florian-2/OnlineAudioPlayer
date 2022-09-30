@@ -67,75 +67,77 @@ function muteOrDemute() {
 </script>
 
 <template>
-    <audio 
-        ref="audio" 
-        :src="musicStore.currentMusic?.metadata?.urlMusic" 
-        @loadedmetadata="musicStore.setDuration"
-        @timeupdate="musicStore.setCurrentTime"
-        @ended="musicStore.handleChangeSong('next')" 
-        hidden
-    >
-    </audio>
+    <template v-if="musicStore.musics.length > 0">
+        <audio 
+            ref="audio" 
+            :src="musicStore.currentMusic?.metadata?.urlMusic" 
+            @loadedmetadata="musicStore.setDuration"
+            @timeupdate="musicStore.setCurrentTime"
+            @ended="musicStore.handleChangeSong('next')" 
+            hidden
+        >
+        </audio>
 
-    <div class="container-action">
-        <div class="actions">
-            <div class="box-btns playPause">
-                <button title="Musique précédente" @click="musicStore.previous">
-                    <IconPrevious/>
-                </button>
+        <div class="container-action">
+            <div class="actions">
+                <div class="box-btns playPause">
+                    <button title="Musique précédente" @click="musicStore.previous">
+                        <IconPrevious/>
+                    </button>
 
-                <button v-if="musicStore.currentMusic.isPaused" title="Jouer" @click="musicStore.play" class="play-pause">
-                    <IconPlay class="svg-play" />
-                </button>
+                    <button v-if="musicStore.currentMusic.isPaused" title="Jouer" @click="musicStore.play" class="play-pause">
+                        <IconPlay class="svg-play" />
+                    </button>
 
-                <button v-else title="Pause" @click="musicStore.pause" class="play-pause">
-                    <IconPause class="svg-pause" />
-                </button>
+                    <button v-else title="Pause" @click="musicStore.pause" class="play-pause">
+                        <IconPause class="svg-pause" />
+                    </button>
 
-                <button title="Musique suivante" @click="musicStore.next">
-                    <IconNext/>
-                </button>
+                    <button title="Musique suivante" @click="musicStore.next">
+                        <IconNext/>
+                    </button>
+                </div>
+
+                <div class="box-btns otherActions">
+                    <button title="Aléatoire" @click="activeShufflePlaying">
+                        <IconShuffle/>
+                    </button>
+
+                    <button @click="muteOrDemute">
+                        <IconVolumeMute v-if="inputVolume === 0" />
+                        <IconVolumeLow v-else-if="inputVolume < 20" />
+                        <IconVolumeMedium v-else-if="inputVolume < 60" />
+                        <IconVolumeHigh v-else/>
+                    </button>
+
+                    <InputRange 
+                        input-min="0" 
+                        input-max="100"
+                        input-step="0.5"
+                        v-model="inputVolume"
+                        @input="setVolume"
+                        class="inputVolume"
+                    />
+                </div>
             </div>
-
-            <div class="box-btns otherActions">
-                <button title="Aléatoire" @click="activeShufflePlaying">
-                    <IconShuffle/>
-                </button>
-
-                <button @click="muteOrDemute">
-                    <IconVolumeMute v-if="inputVolume === 0" />
-                    <IconVolumeLow v-else-if="inputVolume < 20" />
-                    <IconVolumeMedium v-else-if="inputVolume < 60" />
-                    <IconVolumeHigh v-else/>
-                </button>
-
+                
+            <div class="progress-container">           
                 <InputRange 
                     input-min="0" 
-                    input-max="100"
-                    input-step="0.5"
-                    v-model="inputVolume"
-                    @input="setVolume"
-                    class="inputVolume"
+                    :input-max="musicStore.currentMusic.metadata?.duration!"
+                    input-step="0.1"
+                    v-model="inputRangeProgressBar"
+                    @input="inputRange"
+                    class="progress-bar" 
                 />
-            </div>
-        </div>
-            
-        <div class="progress-container">           
-            <InputRange 
-                input-min="0" 
-                :input-max="musicStore.currentMusic.metadata?.duration!"
-                input-step="0.1"
-                v-model="inputRangeProgressBar"
-                @input="inputRange"
-                class="progress-bar" 
-            />
 
-            <div class="time">
-                <span class="time-indicator">{{ musicStore.currentTime }}</span>
-                <span class="time-indicator">{{ musicStore.currentMusic.metadata?.formatDuration }}</span>
+                <div class="time">
+                    <span class="time-indicator">{{ musicStore.currentTime }}</span>
+                    <span class="time-indicator">{{ musicStore.currentMusic.metadata?.formatDuration }}</span>
+                </div>
             </div>
-        </div>
-    </div>
+        </div> 
+    </template>
 </template>
 
 <style lang="scss" scoped>

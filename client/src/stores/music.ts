@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import { addMusic, deleteMusic, favorites, fetchMusics } from "@/services/music.services";
+import { addMusic, deleteMusic, editMusic, favorites, fetchMusics, fetchOneMusic } from "@/services/music.services";
 import { formatTime, generateRandomNumberArr } from "@/utils/features";
-import type { MusicState } from "@/shared/interfaces/music.interface";
+import type { EditMusic, MusicState } from "@/shared/interfaces/music.interface";
 
 
 export const useMusic = defineStore("music", {
@@ -58,6 +58,14 @@ export const useMusic = defineStore("music", {
 				this.fetch.isLoading = false;
 			}
 		},
+		async fetchOneMusic(musicId: string) {
+			try {
+				return await fetchOneMusic(musicId);
+			} 
+			catch (error) {
+				throw error;
+			}
+		},
 		async favorite(musicId: string) {
 			const indexMusic = this.musics.findIndex((music) => music._id === musicId);
 			const music = this.musics[indexMusic];
@@ -74,6 +82,16 @@ export const useMusic = defineStore("music", {
 
 					return await favorites(musicId, false);
 				}
+			} 
+			catch (error) {
+				throw error;
+			}
+		},
+		async editMusic(musicId: string, formData: EditMusic) {
+			try {
+				const newMusic = await editMusic(musicId, formData);
+				const indexMusic = this.musics.findIndex((music) => music._id === newMusic._id);
+				this.musics[indexMusic] = newMusic;
 			} 
 			catch (error) {
 				throw error;

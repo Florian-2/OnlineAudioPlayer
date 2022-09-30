@@ -53,6 +53,41 @@ export const getAllMusics = async (userID) => {
     }
 }
 
+export const getOneMusic = async (userID, musicID) => {
+    try {
+        const res = await Music.findOne({ "user_id": userID }, { musics: { $elemMatch: { _id: musicID } } });
+
+        if (res.musics.length === 0) {
+            throw new Error("Aucune music trouvé");
+        }
+
+        return res;
+    } 
+    catch (error) {
+        throw new Error("Aucune music trouvé");
+    }
+}
+
+export const editOneMusic = async (musicID, formData) => {
+    try {
+        const res = await Music.updateOne(
+            { "musics._id": musicID }, 
+            { $set: { 
+                "musics.$.title": formData.title, 
+                "musics.$.artists": formData.artists, 
+                "musics.$.album": formData.album 
+            } 
+        });
+    
+        if (!res.acknowledged) {
+            throw new Error("Une erreur est survenue lors de la modification de la musique");
+        }
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
 export const likeOrDislike = async (musicID, newValue) => {
     try {
         const res = await Music.updateOne({ "musics._id": musicID }, { $set: { "musics.$.fav": newValue } });
@@ -60,9 +95,8 @@ export const likeOrDislike = async (musicID, newValue) => {
         if (!res.acknowledged) {
             throw new Error("Une erreur est survenue lors de la modification de la musique");
         }
-        else {
-            return true;
-        }
+
+        return true;
     } 
     catch (error) {
         throw error;

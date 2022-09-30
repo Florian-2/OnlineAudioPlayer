@@ -19,6 +19,7 @@ const router = createRouter({
 		},
 		{
 			path: "/music-management/add-music",
+			name: "AddMusic",
 			meta: {
 				title: "AudioPlayer - Ajouter des musiques à ma liste"
 			},
@@ -27,11 +28,21 @@ const router = createRouter({
 		},
 		{
 			path: '/music-management/handle-music',
+			name: "HandleMusics",
 			meta: {
 				title: "AudioPlayer - Gérer mes musiques"
 			},
-			beforeEnter: [isAuthenticated],
-            component: () => import('@/views/HandleMusicView.vue')
+			beforeEnter: [isAuthenticated, initialFetchMusics],
+            component: () => import('@/views/HandleMusicView.vue'),
+		},
+		{
+			path: '/music-management/handle-music/edit/:id',
+			name: "Edit",
+			meta: {
+				title: "AudioPlayer - Edition"
+			},
+			beforeEnter: [isAuthenticated, initialFetchMusics],
+			component: () => import('@/views/EditMusicView.vue')
 		},
 		{
 			path: "/audio-player",
@@ -69,13 +80,13 @@ const router = createRouter({
 			beforeEnter: [isNotAuthenticated],
 		 	component: () => import('@/views/RegisterView.vue')
 		},
-		{
-			path: "/:notfound(.*)*",
-			meta: {
-				title: "AudioPlayer - Page introuvable"
-			},
-			component: () => import("@/views/NotFoundView.vue"),
-		}
+		// {
+		// 	path: "/:notfound(.*)*",
+		// 	meta: {
+		// 		title: "AudioPlayer - Page introuvable"
+		// 	},
+		// 	component: () => import("@/views/NotFoundView.vue"),
+		// }
 	]
 })
 
