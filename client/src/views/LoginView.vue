@@ -85,3 +85,12 @@ const isSubmitting = form.isSubmitting;
         </p>
     </div>
 </template>
+
+<style scoped lang="scss">
+.error {
+    margin-block: 0.5rem;
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    color: $danger-color;
+    text-align: center;
+}
+</style>

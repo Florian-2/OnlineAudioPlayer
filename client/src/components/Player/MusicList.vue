@@ -22,8 +22,8 @@ watch(() => musicStore.favOnly, () => {
             <span role="columnheader">
                 Titre 
                 <div class="favOnly">
-                    (<input type="checkbox" v-model="musicStore.favOnly" name="favOnly" id="favOnly">
-                    <label for="favOnly" id="favOnly">Seulement les favoris</label>)
+                    <input type="checkbox" v-model="musicStore.favOnly" name="favOnly" id="favOnly">
+                    <label for="favOnly" id="favOnly">Seulement les favoris</label>
                 </div>
             </span>
             <span role="columnheader">Artiste</span>
@@ -81,7 +81,7 @@ watch(() => musicStore.favOnly, () => {
         column-gap: 1rem;
 
         @media screen and (max-width: 900px) {
-            grid-template-columns: auto 2fr 1fr 70px;
+            grid-template-columns: minmax(30px, auto) 2fr 1fr 70px;
             
             // Colonne Album
             span:nth-child(4) { 
@@ -130,16 +130,25 @@ watch(() => musicStore.favOnly, () => {
             gap: 1rem;
 
             .favOnly {
-                display: inline-flex;
+                width: 100%;
+                display: grid;
+                grid-template-columns: 15px 1fr;
                 align-items: center;
 
                 input, label {
                     cursor: pointer;
                 }
                 
-                label {
+                input {
+                    grid-column: 1 / 2;
+                }
+
+                label#favOnly {
                     font-size: 1.2rem;
-                    margin-left: 5px;
+                    margin: 0 0 0 0.5rem;
+                    color: $second-color;
+                    grid-column: 2 / 3;
+                    align-items: center;
                 }
             }
         }

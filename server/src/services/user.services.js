@@ -42,3 +42,19 @@ export const findUserById = async (id) => {
         throw error;
     }
 }
+
+export const updateProfile = async (id, formData) => {
+    try {
+        const res = await User.updateOne({ "_id": id }, { $set: { "username": formData.username, "email": formData.email } });
+
+        if (!res.acknowledged) {
+            throw new Error("Une erreur est survenue lors de la modification de votre profil");
+        }
+
+        const user = await findUserById(id);
+        return user;
+    }
+    catch (error) {
+        throw error;
+    }
+}

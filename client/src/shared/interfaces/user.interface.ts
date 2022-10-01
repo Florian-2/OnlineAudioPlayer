@@ -1,7 +1,9 @@
 export interface User {
-    id: string;
+    _id: string;
     email: string;
     username: string;
+    createdAt: Date;
+    updatedAt: Date;
     [propsName: string]: any
 }
 
@@ -15,12 +17,15 @@ export interface SigninForm {
     last_name: string;
     email: string;
     password: string;
-    role: "a9cb7770-588e-4ab5-937e-7bbd155cb791";
     confirmPassword?: string;
-    language?: string;
 }
 
 export interface LoginForm {
     email: string;
     password: string;
+}
+
+export interface EditUser {
+    username: string;
+    email: string;
 }

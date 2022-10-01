@@ -1,11 +1,20 @@
 <script lang="ts" setup>
+import { computed } from 'vue';
+
 const props = defineProps<{
-    btnType: "primary" | "danger"
+    btnType: "primary" | "button" | "danger"
 }>();
+
+const type = computed(() => {
+    if (props.btnType === "primary" || props.btnType === "button") {
+        return 'primary-type';
+    }
+    return 'danger-type';
+})
 </script>
 
 <template>
-    <button :class="props.btnType == 'primary' ? 'primary-type' : 'danger-type'">
+    <button :class="type">
         <slot></slot>
     </button>
 </template>

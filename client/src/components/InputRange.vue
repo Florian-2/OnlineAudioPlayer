@@ -39,22 +39,39 @@ input[type=range] {
     background-image: linear-gradient($first-color, $first-color);
     background-size: 20% 100%;
     background-repeat: no-repeat;
+
+    &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 12px;
+        width: 16px;
+        border-radius: 10px;
+        background: $first-color;
+    }
+
+    &::-webkit-slider-runnable-track {
+        -webkit-appearance: none;
+        appearance: none;
+        box-shadow: none;
+        border: none;
+        background: none;
+    }
 }
 
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    height: 12px;
-    width: 16px;
-    border-radius: 10px;
-    background: $first-color;
-}
+// input[type=range]::-webkit-slider-thumb {
+//     -webkit-appearance: none;
+//     appearance: none;
+//     height: 12px;
+//     width: 16px;
+//     border-radius: 10px;
+//     background: $first-color;
+// }
 
-input[type=range]::-webkit-slider-runnable-track {
-    -webkit-appearance: none;
-    appearance: none;
-    box-shadow: none;
-    border: none;
-    background: none;
-}
+// input[type=range]::-webkit-slider-runnable-track {
+//     -webkit-appearance: none;
+//     appearance: none;
+//     box-shadow: none;
+//     border: none;
+//     background: none;
+// }
 </style>

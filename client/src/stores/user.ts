@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
-import type { LoginForm, SigninForm, UserState } from "@/shared/interfaces";
+import type { EditUser, LoginForm, SigninForm, UserState } from "@/shared/interfaces";
 import { register, login, fetchCurrentUser, logout } from "@/services/auth.services";
+import { editProfile } from "@/services/user.services";
 
 
 export const useUser = defineStore("user", {
@@ -56,6 +57,15 @@ export const useUser = defineStore("user", {
 			} 
 			catch (error) {
 				this.loaded = true;
+			}
+		},
+		async editProfile(formData: EditUser) {
+			try {
+				const user = await editProfile(formData);
+				this.currentUser = user;
+			} 
+			catch (error) {
+				throw error;
 			}
 		}
 	}

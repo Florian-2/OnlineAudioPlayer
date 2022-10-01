@@ -132,6 +132,7 @@ const onSubmit = form.handleSubmit(async (formData) => {
 
     .error {
         font-size: clamp(1.2rem, 2vw, 1.8rem);
+        color: $danger-color;
     }
 
     .link {

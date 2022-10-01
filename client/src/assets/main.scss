@@ -12,9 +12,7 @@ body {
 ::-webkit-scrollbar {
     width: 8px;
 }
-// ::-webkit-scrollbar-track {
-//     background-color: $first-color;
-// }
+
 ::-webkit-scrollbar-thumb {
     background-color: $first-color;
 	border-radius: 5px;
@@ -23,42 +21,40 @@ body {
 #app {
 	background: $second-color;
 
-	form {
-		.form-group {
-			margin-bottom: 2.5rem;
-		}
-
-		label, input {
-			font-size: clamp(1.25rem, 2vw, 1.6rem);
-		}
-
-		label:not(#musics) {
-			display: inline-block;
-			margin-bottom: 0.5rem;
-			color: $first-color;
-		}
-
-		input:not(input[type=file]) {
-			width: 100%;
-			padding: 1rem 0.5rem;
-			color: $first-color;
-			background-color: transparent;
-			border-radius: $raduis;
-			border: 2px solid $first-color;
-			outline: none;
-			box-shadow: $shadow;
-			text-align: start;
-		}	
-		
-		small {
-			display: inline-block;
-			margin-top: 0.5rem;
-			font-size: clamp(1.1rem, 2vw, 1.3rem);
-			color: $danger-color;
-		}
-	}
-
 	main {
 		height: 100vh;
 	}
+}
+
+.form-group {
+	margin-bottom: 2.5rem;
+}
+
+label, input {
+	font-size: clamp(1.25rem, 2vw, 1.6rem);
+}
+
+label:not(#musics, #favOnly) {
+	display: inline-block;
+	margin-bottom: 0.5rem;
+	color: $first-color;
+}
+
+input:not(input[type=file], input[type=range]) {
+	width: 100%;
+	padding: 1rem 0.5rem;
+	color: $first-color;
+	background-color: transparent;
+	border-radius: $raduis;
+	border: 2px solid $first-color;
+	outline: none;
+	box-shadow: $shadow;
+	text-align: start;
+}	
+
+small {
+	display: inline-block;
+	margin-top: 0.5rem;
+	font-size: clamp(1.1rem, 2vw, 1.3rem);
+	color: $danger-color;
 }
