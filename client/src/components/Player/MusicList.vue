@@ -1,13 +1,16 @@
 <script lang="ts" setup>
+import type { Music } from '@/shared/interfaces';
 import { useMusic } from '@/stores/music';
 import { watch } from 'vue';
+import { useToast } from 'vue-toast-notification';
 import IconHeart from '../icons/IconHeart.vue';
 
 const musicStore = useMusic();
+// const $toast = useToast();
 
 watch(() => musicStore.favOnly, () => {
     if (musicStore.favOnly) {
-        musicStore.musics = musicStore.musics.filter((music) => music.fav === true);
+        musicStore.musics = musicStore.musics.filter((music: Music) => music.fav === true);
     }
     else {
         musicStore.musics = musicStore.copyMusics;
@@ -26,7 +29,7 @@ watch(() => musicStore.favOnly, () => {
                     <label for="favOnly" id="favOnly">Seulement les favoris</label>
                 </div>
             </span>
-            <span role="columnheader">Artiste</span>
+            <span role="columnheader">Artiste(s)</span>
             <span role="columnheader">Album</span>
             <span role="columnheader">Durée</span>
         </div>
@@ -62,8 +65,8 @@ watch(() => musicStore.favOnly, () => {
             </div>
         </div>
 
-        <p v-if="musicStore.musics.length === 0 && !musicStore.favOnly">Vous n'avez pas de musique</p>
-        <p v-if="musicStore.musics.length === 0 && musicStore.favOnly">Vous n'avez pas de musique favorite</p>
+        <span class="warning" v-if="musicStore.musics.length === 0 && !musicStore.favOnly">Vous n'avez pas de musique</span>
+        <span class="warning" v-if="musicStore.musics.length === 0 && musicStore.favOnly">Vous n'avez pas de musique favorite</span>
     </div>
 </template>
 

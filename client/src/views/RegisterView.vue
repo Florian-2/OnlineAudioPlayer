@@ -35,25 +35,25 @@ const {
     errorMessage: usernameError, 
     meta: usernameMeta, 
     handleChange: usernameHandleChange, 
-} = useField<string>("username", undefined, { initialValue: "", validateOnValueUpdate: false });
+} = useField<string>("username", undefined, { initialValue: "John", validateOnValueUpdate: false });
 const { 
     value: emailValue, 
     errorMessage: emailError, 
     meta: emailMeta,
     handleChange: emailHandleChange, 
-} = useField<string>("email", undefined, { initialValue: "", validateOnValueUpdate: false });
+} = useField<string>("email", undefined, { initialValue: "john@mail.com", validateOnValueUpdate: false });
 const { 
     value: passwordValue, 
     errorMessage: passwordError, 
     meta: passwordMeta,
     handleChange: passwordHandleChange, 
-} = useField<string>("password", undefined, { initialValue: "", validateOnValueUpdate: false });
+} = useField<string>("password", undefined, { initialValue: "John2022", validateOnValueUpdate: false });
 const { 
     value: confirmPwdValue, 
     errorMessage: confirmPwdError, 
     meta: confirmPwdMeta,
     handleChange: confirmPwdHandleChange, 
-} = useField<string>("confirmPassword", undefined, { initialValue: "", validateOnValueUpdate: false });
+} = useField<string>("confirmPassword", undefined, { initialValue: "John2022", validateOnValueUpdate: false });
 
 const onSubmit = form.handleSubmit(async (formData) => {    
     try {      

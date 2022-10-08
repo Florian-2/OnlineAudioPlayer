@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import Music from "./music.model.js"
+import Token from "./token.model.js"
 
 
 const userSchema = mongoose.Schema({
@@ -40,8 +42,21 @@ userSchema.pre('save', async function (next) {
     }
 })
 
+userSchema.pre('deleteOne', async function (next) {
+    const userDoc = await this.model.findOne(this.getQuery());
+
+    try {       
+        await Music.deleteOne({ "user_id": userDoc._id });
+        await Token.deleteOne({ "user_id": userDoc._id });
+        next();
+    } 
+    catch (error) {
+        next(error);
+    }
+})
+
 userSchema.methods.deleteProp = function(...prop) {
-    const user = this.toObject();        
+    const user = this.toObject();
 
     for (const key in user) {
         if (prop.includes(key)) {

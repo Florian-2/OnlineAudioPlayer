@@ -33,7 +33,7 @@ const emit = defineEmits<{
 
                     <div v-if="dropdownIsOpen" class="menu">
                         <router-link to="/music-management/add-music">Ajouter des musiques</router-link>
-                        <router-link to="/music-management/handle-music">Gérer des musiques</router-link>
+                        <router-link to="/music-management/handle-music" :class="{ 'router-link-active': $route.name === 'Edit' }">Gérer des musiques</router-link>
                     </div>
                 </div>    
             </nav>
@@ -107,7 +107,8 @@ nav {
     }
 }
 
-.router-link-active {
+.router-link-active, 
+.router-link-exact-active {
     color: $first-color;
     transform: translateX(10px);
     font-weight: 500;

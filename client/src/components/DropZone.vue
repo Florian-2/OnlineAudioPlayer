@@ -12,18 +12,17 @@ const active = ref<boolean>(false);
 const pending = ref<boolean>(false);
 const errorServer = ref<string>("");
 const showError = ref<boolean>(false);
-const mimeTypeAudio = ["audio/mpeg", "audio/mp4", "audio/flac", "audio/x-wav", "audio/ogg", "audio/basic"];
+const mimeTypeAudio = ["audio/mpeg", "audio/flac", "audio/x-wav", "audio/ogg", "audio/basic"];
 
 watch(inputFiles, () => {
     if (inputFiles.value) {
-        console.log(inputFiles.value);
-        
-
-        for (const file of inputFiles.value) {            
+        for (const file of inputFiles.value) {             
             if (!mimeTypeAudio.includes(file.type)) {
                 inputFiles.value.delete(file);
+                errorServer.value = "Seuls les fichiers mp3, wav, basic, ogg, flac sont supportés";
+                showError.value = true;
             }
-            else if (file.size > 36_700_160) { // 15MO 16_700_160         
+            else if (file.size > 36_700_160) { // 35 MO                
                 errorServer.value = "La taille est limitée à 35Mo par fichier.";
                 showError.value = true;
                 inputFiles.value.delete(file);
@@ -38,8 +37,6 @@ const toggleError = () => showError.value = !showError.value;
 const convertBytesToMegaBytes = (bytes: number) =>  (bytes / (1024 ** 2)).toFixed(2);
 
 function handleChange(e: Event) {
-    console.log("INPUT");
-
     const input = e.target as HTMLInputElement;
 
     if (input.files) {
@@ -52,9 +49,7 @@ function handleChange(e: Event) {
     }
 }
 
-function dropFile(e: DragEvent) {
-    console.log("DROP");
-    
+function dropFile(e: DragEvent) {   
     if (e.dataTransfer?.files) {
         errorServer.value! &&= "";
         showError.value! &&= false;
@@ -131,8 +126,9 @@ async function handleSubmit() {
 
 <style lang="scss" scoped>
 .container {
-    max-width: 1000px;
-    margin: 2rem auto;
+    width: 100%;
+    max-width: 1400px;
+    margin-block: 5rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 300px 50px;

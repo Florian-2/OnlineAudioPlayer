@@ -13,7 +13,7 @@ import Button from "../components/Button.vue";
 
 const userStore = useUser();
 const router = useRouter();
-const errorLogin = ref("");
+const errorLogin = ref<string>();
 
 const validationSchema = toFormValidator(z.object({
     email,
@@ -43,7 +43,6 @@ const onSubmit = form.handleSubmit(async (formData) => {
     } 
     catch (error) {
         errorLogin.value = "Adresse mail ou mot de passe incorrect.";
-        console.log(error);
     }
 })
 

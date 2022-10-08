@@ -20,3 +20,13 @@ export const editProfile = async (req, res) => {
         console.log(error);
     }
 }
+
+export const deleteAccount = async (req, res) => {
+    try {
+        const user = await User.deleteAccount(req.user._id);
+        res.json(user);
+    } 
+    catch (error) {
+        console.log(error);
+    }
+}

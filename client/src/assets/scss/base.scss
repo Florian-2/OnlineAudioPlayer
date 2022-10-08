@@ -42,3 +42,11 @@ form {
         }
     }
 }
+
+.warning {
+    display: block;
+    font-size: clamp(1.3rem, 2vw, 1.7rem);
+    color: $first-color;
+    text-align: center;
+    margin-top: 10rem;
+}

@@ -1,7 +1,6 @@
 import axios, { AxiosError } from "axios";
 import type { LoginForm, SigninForm, User } from "@/shared/interfaces";
 import { useUser } from "@/stores/user";
-import { useRouter } from "vue-router";
 
 
 export async function register(formData: SigninForm): Promise<User> {

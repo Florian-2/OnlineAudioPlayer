@@ -58,3 +58,13 @@ export const updateProfile = async (id, formData) => {
         throw error;
     }
 }
+
+export const deleteAccount = async (id) => {
+    try {
+        const user = await User.deleteOne(id);
+        return user;
+    }
+    catch (error) {
+        throw error;
+    }
+}

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import type { EditUser, LoginForm, SigninForm, UserState } from "@/shared/interfaces";
 import { register, login, fetchCurrentUser, logout } from "@/services/auth.services";
-import { editProfile } from "@/services/user.services";
+import { editProfile, deleteAccount } from "@/services/user.services";
 
 
 export const useUser = defineStore("user", {
@@ -25,8 +25,10 @@ export const useUser = defineStore("user", {
 	actions: {		
 		async register(formData: SigninForm) {
 			try {
-				const user = await register(formData);
+				await register(formData);
+				const user = await login({ email: formData.email, password: formData.password });
 				this.currentUser = user;
+				
 			} 
 			catch (error) {
 				throw error;
@@ -35,7 +37,7 @@ export const useUser = defineStore("user", {
 		async login({ email, password }: LoginForm) {
 			try {
 				const user = await login({ email, password });
-				this.currentUser = user;		
+				this.currentUser = user;
 			} 
 			catch (error) {
 				throw error;
@@ -66,6 +68,15 @@ export const useUser = defineStore("user", {
 			} 
 			catch (error) {
 				throw error;
+			}
+		},
+		async deleteAccount() {
+			try {
+				console.log("deleteAccount");
+				const res = await deleteAccount();
+			} 
+			catch (error) {
+				throw error;	
 			}
 		}
 	}

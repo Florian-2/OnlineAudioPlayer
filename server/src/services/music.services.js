@@ -43,7 +43,7 @@ export const getAllMusics = async (userID) => {
         const musics = await Music.find({ "user_id": userID });
 
         if (musics.length === 0) {
-            throw new Error("Vous n'avez pas de musiques");
+            throw new Error("Vous n'avez pas de musique");
         }
 
         return musics;

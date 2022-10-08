@@ -26,7 +26,7 @@ function toEdit(musicId: string) {
         </div>
     </div>
 
-    <p v-else>Vous n'avez pas de musique</p>
+    <span class="warning" v-else>Vous n'avez pas de musique</span>
 </template>
 
 <style lang="scss" scoped>
